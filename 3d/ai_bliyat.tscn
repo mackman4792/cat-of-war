@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://barnrl687sxp5"]
+
+[ext_resource type="PackedScene" uid="uid://w6hk12iu2pg4" path="res://3d/ai_bliyat.glb" id="1_kea2a"]
+
+[node name="ai_bliyat" unique_id=340942400 instance=ExtResource("1_kea2a")]

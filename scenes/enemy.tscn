@@ -4,7 +4,7 @@
 [ext_resource type="Shader" uid="uid://bmmrj0wi68ltf" path="res://scripts/ps1_jitter.gdshader" id="2_md0e3"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_md0e3"]
-radius = 0.296
+radius = 0.241
 height = 1.474
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4ra3w"]
@@ -14,14 +14,14 @@ shader_parameter/jitter_strength = 0.5
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_4ra3w"]
 material = SubResource("ShaderMaterial_4ra3w")
-radius = 0.275
+radius = 0.215
 height = 1.47
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_7p1mj"]
 size = Vector3(14.758589, 1.4663086, 13.892822)
 
 [sub_resource type="SphereMesh" id="SphereMesh_md0e3"]
-radius = 0.25
+radius = 0.185
 height = 0.5
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_md0e3"]
@@ -106,7 +106,7 @@ blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_5g818")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_md0e3"]
-radius = 0.27
+radius = 0.28
 
 [node name="CharacterBody3D" type="CharacterBody3D" unique_id=42211483]
 collision_layer = 15
@@ -138,34 +138,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.84334016, 0)
 mesh = SubResource("SphereMesh_md0e3")
 
 [node name="Cube" type="MeshInstance3D" parent="." unique_id=1794146224]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0.26685327, 0.11742709, -0.086309254)
+transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, -1, 0.26685327, 0.11742709, -0.086309254)
 material_override = SubResource("ShaderMaterial_md0e3")
 mesh = SubResource("ArrayMesh_4ra3w")
 
 [node name="Cube_001" type="MeshInstance3D" parent="." unique_id=124902379]
-transform = Transform3D(-1, -8.7400544e-08, -1.9713469e-09, 0, 0.022549579, -0.9997457, 8.742278e-08, -0.99974567, -0.02254958, 0.2617677, 0.26891002, -0.23781323)
+transform = Transform3D(-1, -1.5095739e-07, -3.4048921e-09, 0, 0.022549579, -0.9997457, 1.509958e-07, -0.99974567, -0.02254958, 0.2617677, 0.26891002, -0.23781323)
 material_override = SubResource("ShaderMaterial_md0e3")
 mesh = SubResource("ArrayMesh_5uy6h")
 
 [node name="RayCast3D" type="RayCast3D" parent="." unique_id=1432338638]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.14210951, 0.21623945, 0)
 target_position = Vector3(0, 0, -5)
-
-[node name="point1" type="Marker3D" parent="." unique_id=397331837]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
-gizmo_extents = 1.0
-
-[node name="point2" type="Marker3D" parent="." unique_id=1819365821]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
-gizmo_extents = 1.0
-
-[node name="point3" type="Marker3D" parent="." unique_id=487569067]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
-gizmo_extents = 1.0
-
-[node name="point4" type="Marker3D" parent="." unique_id=548149773]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
-gizmo_extents = 1.0
 
 [node name="head" type="CollisionShape3D" parent="." unique_id=467787677]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.82301044, 0)

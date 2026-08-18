@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b0sah3rveic1u"]
 
-[ext_resource type="Script" uid="uid://cu8vveb71c5if" path="res://dog_enemy.gd" id="1_651uv"]
+[ext_resource type="Script" uid="uid://cu8vveb71c5if" path="res://scripts/dog_enemy.gd" id="1_651uv"]
 [ext_resource type="Shader" uid="uid://bmmrj0wi68ltf" path="res://scripts/ps1_jitter.gdshader" id="2_aaxt1"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_aaxt1"]

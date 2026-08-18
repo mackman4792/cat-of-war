@@ -10,15 +10,17 @@
 [ext_resource type="Script" uid="uid://djr7jdk4qepvm" path="res://scripts/pause_menu.gd" id="4_c6euj"]
 [ext_resource type="Shader" uid="uid://bmmrj0wi68ltf" path="res://scripts/ps1_jitter.gdshader" id="6_ov54e"]
 [ext_resource type="PackedScene" uid="uid://b7rj12uai824y" path="res://3d/pps.tscn" id="6_v00sg"]
-[ext_resource type="AudioStream" uid="uid://bq1kutbd1yvg5" path="res://scenes/no ammo.mp3" id="7_1u7qd"]
-[ext_resource type="AudioStream" uid="uid://cehofmy67rpwy" path="res://scenes/chik.mp3" id="8_6k07c"]
+[ext_resource type="AudioStream" uid="uid://bq1kutbd1yvg5" path="res://sounds/no ammo.mp3" id="7_1u7qd"]
+[ext_resource type="AudioStream" uid="uid://cehofmy67rpwy" path="res://sounds/chik.mp3" id="8_6k07c"]
 [ext_resource type="PackedScene" uid="uid://2gak8flsay3p" path="res://3d/Makarov_Mesh.glb" id="9_1u7qd"]
-[ext_resource type="AudioStream" uid="uid://d0o0u58b64o2a" path="res://scenes/god...mp3" id="10_ov54e"]
-[ext_resource type="AudioStream" uid="uid://bmuynch5y8hm3" path="res://scenes/abadoned.mp3" id="11_ov54e"]
-[ext_resource type="AudioStream" uid="uid://b3cysnx541gie" path="res://im_sorry/click.mp3" id="12_aougp"]
+[ext_resource type="AudioStream" uid="uid://d0o0u58b64o2a" path="res://sounds/god...mp3" id="10_ov54e"]
+[ext_resource type="AudioStream" uid="uid://bmuynch5y8hm3" path="res://sounds/abadoned.mp3" id="11_ov54e"]
+[ext_resource type="AudioStream" uid="uid://b3cysnx541gie" path="res://sounds/click.mp3" id="12_aougp"]
 [ext_resource type="Script" uid="uid://bpi6vdbf6h0yi" path="res://scenes/hands.gd" id="12_hbmbl"]
-[ext_resource type="AudioStream" uid="uid://1c8sj3wylvaj" path="res://im_sorry/PPS_ZATZOR.mp3" id="13_2ubwf"]
-[ext_resource type="AudioStream" uid="uid://jm0aejl6xmpc" path="res://im_sorry/phew.mp3" id="16_i3mcw"]
+[ext_resource type="AudioStream" uid="uid://1c8sj3wylvaj" path="res://sounds/PPS_ZATZOR.mp3" id="13_2ubwf"]
+[ext_resource type="AudioStream" uid="uid://jm0aejl6xmpc" path="res://sounds/phew.mp3" id="16_i3mcw"]
+[ext_resource type="AudioStream" uid="uid://co5mjjr3ms4tp" path="res://sounds/punch.mp3" id="17_gvn1x"]
+[ext_resource type="PackedScene" uid="uid://barnrl687sxp5" path="res://3d/ai_bliyat.tscn" id="20_wgwu6"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_cthcg"]
 size = Vector2(300, 5)
@@ -143,6 +145,30 @@ tracks/5/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector3(0.18163659, -0.1032722, -0.45649913)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Shovel_Mesh:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.2680734, -0.28000557, -0.4299092)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Shovel_Mesh:rotation")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.3097785, 0, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_1552c"]
@@ -717,6 +743,34 @@ tracks/9/keys = {
 [sub_resource type="Animation" id="Animation_1u7qd"]
 resource_name = "shoot"
 
+[sub_resource type="Animation" id="Animation_gvn1x"]
+resource_name = "shovel_attaack"
+length = 0.9
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Shovel_Mesh:position")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.008333334, 0.1, 0.3, 0.46666667, 0.73333335, 0.8666667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(0.2680734, -0.28000557, -0.4299092), Vector3(0.23311314, -0.24359608, -0.44899237), Vector3(0.21458298, -0.24234873, -0.47497275), Vector3(0.21458298, -0.209759, -0.425878), Vector3(0.23010895, -0.209759, -0.425878), Vector3(0.2680734, -0.28000557, -0.4299092)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Shovel_Mesh:rotation")
+tracks/1/interp = 0
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.008333334, 0.1, 0.3, 0.48000005, 0.73333335, 0.8666667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(0.3097785, 0, 0), Vector3(-0.6432288, 0.45237043, -0.2715944), Vector3(-0.98935807, 0.7944219, -0.592088), Vector3(-1.0868183, 1.0012364, -0.8315913), Vector3(0.44522712, 0.44912457, 0.31758732), Vector3(0.3097785, 0, 0)]
+}
+
 [sub_resource type="Animation" id="Animation_c6euj"]
 resource_name = "unaim"
 length = 1.5000035
@@ -759,6 +813,7 @@ _data = {
 &"pps_reload": SubResource("Animation_ov54e"),
 &"reload": SubResource("Animation_v00sg"),
 &"shoot": SubResource("Animation_1u7qd"),
+&"shovel_attaack": SubResource("Animation_gvn1x"),
 &"unaim": SubResource("Animation_c6euj")
 }
 
@@ -823,6 +878,9 @@ _data = {
 &"aim": SubResource("Animation_i3mcw"),
 &"unaim": SubResource("Animation_2ubwf")
 }
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gvn1x"]
+size = Vector3(0.15, 0.1, 2)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_nr340"]
 resource_local_to_scene = true
@@ -1068,6 +1126,16 @@ stream = ExtResource("12_aougp")
 [node name="pps_zatvor" type="AudioStreamPlayer" parent="Head/Camera3D/WeaponContainer" unique_id=2058880854]
 stream = ExtResource("13_2ubwf")
 
+[node name="Shovel_Mesh" parent="Head/Camera3D/WeaponContainer" unique_id=340942400 instance=ExtResource("20_wgwu6")]
+transform = Transform3D(0.8999998, 0, 0, 0, 0.8571609, -0.2743629, 0, 0.2743629, 0.8571609, 0.2680734, -0.28000557, -0.4299092)
+
+[node name="ShovelRay" type="ShapeCast3D" parent="Head/Camera3D/WeaponContainer/Shovel_Mesh" unique_id=926009430]
+transform = Transform3D(1, 0, 0, 0, 0.95876414, 0.28419918, 0, -0.28419918, 0.95876414, 0, 0.77538896, -1.2668395)
+shape = SubResource("BoxShape3D_gvn1x")
+
+[node name="shovel_swing" type="AudioStreamPlayer" parent="Head/Camera3D/WeaponContainer" unique_id=544076163]
+stream = ExtResource("17_gvn1x")
+
 [node name="KickCast" type="ShapeCast3D" parent="Head/Camera3D" unique_id=1370429110]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0.503, -0.6)
 shape = SubResource("BoxShape3D_nr340")
@@ -1119,3 +1187,4 @@ parameters/looping = true
 
 [editable path="Head/Camera3D/WeaponContainer/PP_Mesh"]
 [editable path="Head/Camera3D/WeaponContainer/Makarov_Mesh"]
+[editable path="Head/Camera3D/WeaponContainer/Shovel_Mesh"]
