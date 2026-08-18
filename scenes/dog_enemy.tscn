@@ -1,0 +1,93 @@
+[gd_scene format=3 uid="uid://b0sah3rveic1u"]
+
+[ext_resource type="Script" uid="uid://cu8vveb71c5if" path="res://dog_enemy.gd" id="1_651uv"]
+[ext_resource type="Shader" uid="uid://bmmrj0wi68ltf" path="res://scripts/ps1_jitter.gdshader" id="2_aaxt1"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_aaxt1"]
+radius = 0.09033203
+height = 0.37957764
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_h4jrb"]
+radius = 0.052
+height = 0.25473022
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_6etqx"]
+radius = 0.067
+height = 0.24
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_lh1ya"]
+radius = 0.065
+height = 0.32
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_upgaf"]
+radius = 0.055
+height = 0.205
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h4jrb"]
+render_priority = 0
+shader = ExtResource("2_aaxt1")
+shader_parameter/jitter_strength = 0.5
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_gehja"]
+material = SubResource("ShaderMaterial_h4jrb")
+radius = 0.045
+height = 0.205
+
+[node name="DogEnemy" type="CharacterBody3D" unique_id=1832786412]
+collision_layer = 15
+collision_mask = 3
+platform_wall_layers = 15
+safe_margin = 0.01
+script = ExtResource("1_651uv")
+
+[node name="body" type="CollisionShape3D" parent="." unique_id=327760355]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0.2805142, 0)
+shape = SubResource("CapsuleShape3D_aaxt1")
+
+[node name="leg4" type="CollisionShape3D" parent="." unique_id=870783387]
+transform = Transform3D(1, 0, 0, 0, 0.99997836, -0.0065798284, 0, 0.0065798284, 0.99997836, 0.04520542, 0.07569006, 0.10270499)
+shape = SubResource("CapsuleShape3D_h4jrb")
+
+[node name="leg3" type="CollisionShape3D" parent="." unique_id=1577352833]
+transform = Transform3D(1, 0, 0, 0, 0.99997836, -0.0065798284, 0, 0.0065798284, 0.99997836, -0.06611273, 0.07569006, 0.10270499)
+shape = SubResource("CapsuleShape3D_h4jrb")
+
+[node name="leg2" type="CollisionShape3D" parent="." unique_id=1432349060]
+transform = Transform3D(1, 0, 0, 0, 0.99997836, -0.0065798284, 0, 0.0065798284, 0.99997836, 0.04520542, 0.07569006, -0.1282666)
+shape = SubResource("CapsuleShape3D_h4jrb")
+
+[node name="leg" type="CollisionShape3D" parent="." unique_id=115724975]
+transform = Transform3D(1, 0, 0, 0, 0.99997836, -0.0065798284, 0, 0.0065798284, 0.99997836, -0.08192673, 0.07569006, -0.12908863)
+shape = SubResource("CapsuleShape3D_h4jrb")
+
+[node name="head" type="CollisionShape3D" parent="." unique_id=864391671]
+transform = Transform3D(1, 0, 0, 0, -0.6257874, -0.77999365, 0, 0.77999365, -0.6257874, 0.010331333, 0.37897828, -0.18725808)
+shape = SubResource("CapsuleShape3D_6etqx")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1463461990]
+transform = Transform3D(1, 0, 0, 0, -0.022460522, -0.99974775, 0, 0.99974775, -0.022460522, 0.008270502, 0.28311628, -0.0018913448)
+mesh = SubResource("CapsuleMesh_lh1ya")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=606404596]
+transform = Transform3D(1, 0, 0, 0, -0.46289387, -0.8864137, 0, 0.8864137, -0.46289387, 0.008270502, 0.38257754, -0.2237518)
+mesh = SubResource("CapsuleMesh_upgaf")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="." unique_id=2095689034]
+transform = Transform3D(1, 0, 0, 0, 0.9995869, -0.028741688, 0, 0.028741688, 0.9995869, 0.04540117, 0.09326111, 0.10962041)
+mesh = SubResource("CapsuleMesh_gehja")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="." unique_id=866368555]
+transform = Transform3D(1, 0, 0, 0, 0.9995869, -0.028741688, 0, 0.028741688, 0.9995869, -0.059619248, 0.09326111, 0.10962041)
+mesh = SubResource("CapsuleMesh_gehja")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="." unique_id=232029479]
+transform = Transform3D(1, 0, 0, 0, 0.9995869, -0.028741688, 0, 0.028741688, 0.9995869, -0.059619248, 0.09326111, -0.12317793)
+mesh = SubResource("CapsuleMesh_gehja")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="." unique_id=475769105]
+transform = Transform3D(1, 0, 0, 0, 0.9995869, -0.028741688, 0, 0.028741688, 0.9995869, 0.060136646, 0.09326111, -0.12317793)
+mesh = SubResource("CapsuleMesh_gehja")
+
+[node name="BiteRay" type="RayCast3D" parent="." unique_id=1049791685]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.37683684, -0.23642753)
+target_position = Vector3(0, 0, -0.5)

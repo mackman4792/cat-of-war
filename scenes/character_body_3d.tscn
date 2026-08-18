@@ -1,0 +1,1121 @@
+[gd_scene format=3 uid="uid://dkcewwbmjv6ye"]
+
+[ext_resource type="Script" uid="uid://dnguyheil2db" path="res://scenes/character_body_3d.gd" id="1_iwpo4"]
+[ext_resource type="Texture2D" uid="uid://b04vsu42s63kt" path="res://im_sorry/g.png" id="2_ix3jf"]
+[ext_resource type="Texture2D" uid="uid://uuyppn4j82w7" path="res://im_sorry/hp.png" id="2_ls2h8"]
+[ext_resource type="Shader" uid="uid://v2c5mu3e0efk" path="res://scripts/ghosting.gdshader" id="2_o7tup"]
+[ext_resource type="Shader" uid="uid://ck80awoqvhep0" path="res://scripts/panic_shader.gdshader" id="3_lxkhp"]
+[ext_resource type="Script" uid="uid://cpak8gtswpmk0" path="res://scenes/weapon_container.gd" id="4_6k07c"]
+[ext_resource type="Shader" uid="uid://ck6cqr7kademj" path="res://scripts/blur.gdshader" id="4_1552c"]
+[ext_resource type="Script" uid="uid://djr7jdk4qepvm" path="res://scripts/pause_menu.gd" id="4_c6euj"]
+[ext_resource type="Shader" uid="uid://bmmrj0wi68ltf" path="res://scripts/ps1_jitter.gdshader" id="6_ov54e"]
+[ext_resource type="PackedScene" uid="uid://b7rj12uai824y" path="res://3d/pps.tscn" id="6_v00sg"]
+[ext_resource type="AudioStream" uid="uid://bq1kutbd1yvg5" path="res://scenes/no ammo.mp3" id="7_1u7qd"]
+[ext_resource type="AudioStream" uid="uid://cehofmy67rpwy" path="res://scenes/chik.mp3" id="8_6k07c"]
+[ext_resource type="PackedScene" uid="uid://2gak8flsay3p" path="res://3d/Makarov_Mesh.glb" id="9_1u7qd"]
+[ext_resource type="AudioStream" uid="uid://d0o0u58b64o2a" path="res://scenes/god...mp3" id="10_ov54e"]
+[ext_resource type="AudioStream" uid="uid://bmuynch5y8hm3" path="res://scenes/abadoned.mp3" id="11_ov54e"]
+[ext_resource type="AudioStream" uid="uid://b3cysnx541gie" path="res://im_sorry/click.mp3" id="12_aougp"]
+[ext_resource type="Script" uid="uid://bpi6vdbf6h0yi" path="res://scenes/hands.gd" id="12_hbmbl"]
+[ext_resource type="AudioStream" uid="uid://1c8sj3wylvaj" path="res://im_sorry/PPS_ZATZOR.mp3" id="13_2ubwf"]
+[ext_resource type="AudioStream" uid="uid://jm0aejl6xmpc" path="res://im_sorry/phew.mp3" id="16_i3mcw"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_cthcg"]
+size = Vector2(300, 5)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nr340"]
+shader = ExtResource("2_o7tup")
+shader_parameter/ghost_pixel_shift = 5.0
+shader_parameter/ghost_intensity = 0.2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v00sg"]
+shader = ExtResource("3_lxkhp")
+shader_parameter/panic_intensity = 0.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_6k07c"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hbmbl"]
+shader = ExtResource("4_1552c")
+shader_parameter/blur_amount = 2.5
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_c6euj"]
+size = Vector2(425, 25)
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_hbmbl"]
+size = Vector2(425, 10)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_cthcg"]
+lifetime_randomness = 0.1
+direction = Vector3(1, 1, 1)
+initial_velocity_min = 6.0
+initial_velocity_max = 12.0
+gravity = Vector3(0, -15, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cthcg"]
+albedo_color = Color(1, 0.57254905, 0, 1)
+metallic = 0.75
+metallic_specular = 0.7
+
+[sub_resource type="BoxMesh" id="BoxMesh_86qqj"]
+material = SubResource("StandardMaterial3D_cthcg")
+size = Vector3(0.02, 0.02, 0.02)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1552c"]
+render_priority = 0
+shader = ExtResource("6_ov54e")
+shader_parameter/jitter_strength = 0.5
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c6euj"]
+render_priority = 0
+shader = ExtResource("6_ov54e")
+shader_parameter/jitter_strength = 0.5
+
+[sub_resource type="Animation" id="Animation_lxkhp"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = false
+tracks/0/path = NodePath("..:fov")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [71.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = false
+tracks/1/path = NodePath("Makarov_Mesh:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(3.5910378e-29, 3.1415925, 4.280379e-15)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = false
+tracks/2/path = NodePath("Makarov_Mesh:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.1818636, -0.20170492, -0.18116224)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = false
+tracks/3/path = NodePath("PP_Mesh:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.44438303, 0.049915783, -0.021473559)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = false
+tracks/4/path = NodePath("PP_Mesh:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.19920842, -0.2537048, -0.2525504)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("MuzzleFlash:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.18163659, -0.1032722, -0.45649913)]
+}
+
+[sub_resource type="Animation" id="Animation_1552c"]
+resource_name = "aim"
+length = 1.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("..:fov")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.12769827, 0.23333333, 0.47620812, 0.7, 0.86994445, 1.0333333, 1.202492, 1.370096, 1.3727564),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [75.0, 73.0, 71.0, 68.0, 66.5, 63.0, 61.5, 59.0, 61.5, 58.0]
+}
+
+[sub_resource type="Animation" id="Animation_6k07c"]
+resource_name = "makarov_reload"
+length = 3.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Makarov_Mesh:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(-0.008333334, 0.21, 0.4, 0.58999985, 0.88999987, 1.0799998, 1.3099998, 1.6499999, 1.9299998, 2.1699998, 2.3799999, 2.59, 2.7099998, 2.83, 3, 3.1416667, 3.2666667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(0, 3.1415925, 0), Vector3(1.4002681e-08, 3.1415925, 0.09286898), Vector3(5.209182e-08, 3.1415925, 0.34943235), Vector3(6.350721e-08, 3.1415925, 0.42612213), Vector3(8.812268e-08, 3.1415925, 0.6016324), Vector3(8.297935e-08, 3.1415925, 0.5678952), Vector3(8.674227e-08, 3.0553906, 0.6016324), Vector3(0.014658578, 3.0553813, 0.60036564), Vector3(8.812268e-08, 3.1415925, 0.6016324), Vector3(6.485316e-08, 3.1415925, 0.45338413), Vector3(3.6349892e-08, 3.1415925, 0.2827957), Vector3(2.793374e-08, 3.1415925, 0.22739896), Vector3(-3.0903927e-08, 3.1415925, -0.15376352), Vector3(-0.0011514411, 3.1206803, -0.118953705), Vector3(-0.12807877, 3.1205077, -0.11628421), Vector3(-0.024114963, 3.1206744, -0.11847328), Vector3(0, 3.1415925, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Makarov_Mesh:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(-0.008333334, 0.21, 0.4, 0.88999987, 1.1699998, 1.5099999, 1.6799998, 1.9299998, 2.1699998, 2.3799999, 2.5199997, 2.59, 2.7099998, 2.8333333, 3, 3.1416667, 3.2666667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(0.19798198, -0.21477932, -0.2110013), Vector3(0.17401537, -0.23421639, -0.2110013), Vector3(0.09858775, -0.21477932, -0.22408475), Vector3(0.10426247, -0.21477932, -0.23205946), Vector3(0.11782047, -0.20295554, -0.23205946), Vector3(0.101459175, -0.20295554, -0.23205946), Vector3(0.1099973, -0.21631813, -0.23205946), Vector3(0.1099973, -0.21035695, -0.23205946), Vector3(0.1099973, -0.21484238, -0.23205946), Vector3(0.1099973, -0.23567343, -0.23205946), Vector3(0.138454, -0.23567343, -0.23205946), Vector3(0.14735265, -0.23567343, -0.23205946), Vector3(0.22352746, -0.21886969, -0.23205946), Vector3(0.2206522, -0.21432465, -0.23205946), Vector3(0.2206522, -0.20789552, -0.18039194), Vector3(0.2206522, -0.21057582, -0.20193195), Vector3(0.19798198, -0.21477932, -0.2110013)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Makarov_Mesh/Cube_003:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.033333335, 0.75, 1.08, 1.4, 1.61, 1.63, 1.81, 2.2, 2.36, 2.51, 2.66, 2.9833333),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(0, 0.056971446, 0.023913115), Vector3(-0.007811725, -0.1766969, 0.02701509), Vector3(-0.0143041015, -0.29706204, 0.02701509), Vector3(0.01805988, -0.31928122, 0.02701509), Vector3(0.12913236, -0.66130835, 0.02701503), Vector3(0.21994483, -1.0329028, 0.02701503), Vector3(0.19829276, -0.5851763, 0.02701503), Vector3(-0.01479286, -0.2775547, 0.027015269), Vector3(0.0067130327, -0.2089907, 0.020212948), Vector3(0.00030267553, -0.06513739, 0.020212948), Vector3(0.00028902292, 0.056235433, 0.020212948), Vector3(0, 0.056971446, 0.023913115)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Makarov_Mesh/Cube_003:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.75, 1.08, 1.4, 1.61, 1.63, 1.81, 2.2, 2.36, 2.51, 2.66, 2.95),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(0, 0, 0), Vector3(-3.552714e-15, 1.0587914e-22, -2.9802326e-08), Vector3(-1.1546324e-14, 5.029262e-22, -2.9802337e-08), Vector3(-1.4724623e-07, 1.0402765e-07, -1.0834305), Vector3(-0.013968683, -0.018187989, -0.39688072), Vector3(-0.013968684, -0.018187987, -0.39688072), Vector3(-0.013968683, -0.018187987, -0.39688072), Vector3(-0.0056258705, -0.022231944, 0.010170205), Vector3(-0.005625871, -0.022231959, 0.010170115), Vector3(-0.0056258696, -0.022231955, 0.0101701915), Vector3(-0.005625872, -0.022231957, 0.010170194), Vector3(0, 0, 0)]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(2.4333334, 2.9666667, 3.2666667),
+"transitions": PackedFloat32Array(1, 1, 1),
+"values": [{
+"args": [],
+"method": &"clic"
+}, {
+"args": [],
+"method": &"recharge_pistol"
+}, {
+"args": [],
+"method": &"finish_reload"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_ls2h8"]
+resource_name = "null_pps_reload"
+length = 3.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PP_Mesh:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2647319, 0.50785303, 0.7509742, 0.9454711, 1.1129546, 1.3344649, 1.4965457, 1.7612776, 1.9665799, 2.2042983, 2.3123522, 2.420406, 2.6, 2.76, 2.93, 3.2333333),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(0.20220134, -0.18896037, -0.25012282), Vector3(0.20220134, -0.23421067, -0.25324774), Vector3(0.19285735, -0.23421067, -0.28379828), Vector3(0.17506018, -0.23421067, -0.28379828), Vector3(0.17907384, -0.22805905, -0.28379828), Vector3(0.17907384, -0.23331785, -0.28379828), Vector3(0.17907384, -0.23331785, -0.28379828), Vector3(0.17202747, -0.23691571, -0.28379828), Vector3(0.16707763, -0.23691571, -0.28379828), Vector3(0.17114928, -0.23691571, -0.28379828), Vector3(0.17161658, -0.23728836, -0.28379828), Vector3(0.17161658, -0.23020685, -0.28379828), Vector3(0.17161658, -0.23549235, -0.28379828), Vector3(0.17800291, -0.23551482, -0.28432852), Vector3(0.17800292, -0.23551485, -0.28432858), Vector3(0.18018603, -0.23486423, -0.17784154), Vector3(0.20220134, -0.18896037, -0.25012282)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PP_Mesh:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2647319, 0.50785303, 0.7509742, 0.9454711, 1.3344649, 1.4965457, 1.7612776, 1.9665799, 2.2042983, 2.6, 2.76, 2.93, 3.2333333),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(0, 0, 0), Vector3(0.4348488, 0, 0), Vector3(0.73768985, 0.24356993, 0.08125507), Vector3(0.73769, 0.6370719, 0.08125505), Vector3(0.7376899, 0.63707197, 0.08125505), Vector3(0.7376899, 0.51973355, 0.08125508), Vector3(0.7871493, 0.5476492, 0.12165786), Vector3(0.7932591, 0.53741705, 0.10725664), Vector3(0.8096776, 0.5079912, 0.0662993), Vector3(0.94341284, 0.6083632, 0.19653459), Vector3(0.25111255, 0.25165886, -0.16043147), Vector3(0.104419455, 0.22178164, -0.18080978), Vector3(0.41206142, 0.18807438, -0.24048953), Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("PP_Mesh/PPS_Magazine:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.72936344, 0.83201456, 1.0643303, 1.4857403, 1.6370157, 1.998996, 2.2853386, 2.4636276, 2.6666667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(0, -3.1359055, 0), Vector3(0, -3.1359055, 0), Vector3(-3.0479836e-08, -3.1359053, 0), Vector3(-3.0649325e-08, -3.1359053, -2.9802315e-08), Vector3(2.9801846e-08, -3.1359055, 5.9604623e-08), Vector3(2.9462871e-08, -3.1359055, 2.9802312e-08), Vector3(5.94342e-08, -3.1359055, 2.9802312e-08), Vector3(1.7864156e-07, -3.1359055, 0), Vector3(1.7872628e-07, -3.1359055, 4.470347e-08), Vector3(0, -3.1359055, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("PP_Mesh/PPS_Magazine:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.72936344, 0.83201456, 1.0643303, 1.4857403, 1.6370157, 1.998996, 2.2853386, 2.4636276, 2.6666667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(-0.009561918, 0.08478451, -0.11897508), Vector3(-0.009561918, 0.08478451, -0.11897508), Vector3(-0.04831931, 0.012127876, -0.10101223), Vector3(-0.19689596, -0.37280363, 0.15245986), Vector3(-0.13146663, -0.11707279, -0.059639096), Vector3(-0.10295686, -0.06152594, -0.09280938), Vector3(-0.04091713, 0.01224944, -0.11290854), Vector3(-0.033234835, 0.053759873, -0.14094865), Vector3(-0.016387463, 0.06436932, -0.1310184), Vector3(-0.009561918, 0.08478451, -0.11897508)]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(2.4333334, 2.9, 3.2333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"values": [{
+"args": [],
+"method": &"clic"
+}, {
+"args": [],
+"method": &"PPS_Z"
+}, {
+"args": [],
+"method": &"finish_reload"
+}]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("..:rotation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.57, 0.88, 1.26, 1.66, 2.07, 2.17, 2.49, 3.12),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(0, 0, 0), Vector3(0.12379622, 0, 0), Vector3(0.015463633, 0, 0), Vector3(-0.11637853, 0, 0), Vector3(0.036058526, -0.08932594, 2.7773635e-17), Vector3(-0.0469663, -0.08936653, 0.007435696), Vector3(-0.046966296, 0.005492144, 0.0074356957), Vector3(0.024885911, -0.08286029, 0.0014668966), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_xrsio"]
+resource_name = "pew"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MuzzleFlash:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4849902),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector3(0.18659315, -0.08152884, -0.42920658), Vector3(-0.0016096532, -0.062468827, -0.1285835)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PP_Mesh:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.09916907, 0.20306046, 0.40612093, 0.40769506, 0.40926915),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(0.20220134, -0.21130276, -0.25012282), Vector3(0.16836059, -0.2212798, -0.25012282), Vector3(0.08364837, -0.2212798, -0.25012282), Vector3(-0.036991566, -0.2212798, -0.31596825), Vector3(-0.036991566, -0.2212798, -0.37470305), Vector3(-0.0016755313, -0.2212798, -0.37470305)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("PP_Mesh:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.09916907, 0.20306046, 0.30695188, 0.40612093, 0.40769506),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(0, 0.0450644, 0), Vector3(0.16000484, 0.045647874, 0.0072776843), Vector3(0.7254172, 0.06024464, 0.03999625), Vector3(1.0081642, 0.08455501, 0.07156967), Vector3(0.9667994, 3.0621886, 3.076193), Vector3(0.8511539, 3.0731916, 3.0901172)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Makarov_Mesh:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.035592914, 0.13333334, 0.24402022, 0.33333334, 0.43333334, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(-0.12807879, 3.1205077, -0.1162842), Vector3(0.07836574, 3.120616, -0.120620154), Vector3(0.07836576, -2.760201, -0.12062015), Vector3(-0.049814638, -2.339216, 0.003269033), Vector3(-0.2705043, -0.81180304, -0.28372878), Vector3(-0.42251673, 0.028455822, -0.2882015), Vector3(-0.5623789, 0.030678859, -0.29289207)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Makarov_Mesh:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.035592914, 0.13333334, 0.24402022, 0.33333334, 0.43333334, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(0.2206522, -0.20789552, -0.18039194), Vector3(0.16063926, -0.20789552, -0.18039194), Vector3(0.10760197, -0.26466274, -0.18039194), Vector3(0.019696832, -0.27942878, -0.18039194), Vector3(-0.026399463, -0.27942878, -0.18039194), Vector3(-0.026399463, -0.27942878, -0.24546346), Vector3(-0.05829887, -0.27942878, -0.25559783)]
+}
+
+[sub_resource type="Animation" id="Animation_hbmbl"]
+resource_name = "pistol_aim"
+length = 1.5000035
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Makarov_Mesh:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.36869836, 0.58, 0.76, 1, 1.21, 1.4, 1.5000035),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(0.2206522, -0.20789552, -0.18039194), Vector3(0.1818636, -0.20170492, -0.18116224), Vector3(0.13419026, -0.21100962, -0.18000445), Vector3(0.08225168, -0.20610988, -0.18000445), Vector3(0.036289886, -0.19604933, -0.18000445), Vector3(0.036289886, -0.2102732, -0.19210808), Vector3(0.014320657, -0.2102732, -0.19584866), Vector3(0.015176117, -0.15882945, -0.21256986), Vector3(0.015176117, -0.14735073, -0.17425494)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Makarov_Mesh:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.36869836, 0.58, 0.76, 1, 1.21, 1.4, 1.5000035),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(0, 3.1415925, 0), Vector3(3.5910378e-29, 3.1415925, 4.280379e-15), Vector3(0.15554374, 3.1415925, -2.3677707e-08), Vector3(0.4401546, 3.1415925, -7.05417e-08), Vector3(-0.300598, 3.1415925, 3.6140516e-08), Vector3(-0.071924925, 3.1415925, 1.8232564e-09), Vector3(0.20593145, 3.1415925, -4.048811e-08), Vector3(0.008726646, 3.1415927, 0), Vector3(0.008726646, -3.1415925, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("PP_Mesh:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.12503788, 0.3, 0.47620812, 0.5719818, 0.74490654, 0.86, 1.03, 1.16, 1.32, 1.33, 1.5000035),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(0.19920842, -0.20215845, -0.22103497), Vector3(0.19920842, -0.2537048, -0.2525504), Vector3(0.15366314, -0.2913653, -0.24786419), Vector3(0.07970412, -0.29136527, -0.24786419), Vector3(0.030833915, -0.2913652, -0.24786419), Vector3(-0.02016376, -0.29136512, -0.24786416), Vector3(-0.004622452, -0.29136512, -0.24786416), Vector3(0.0111395195, -0.28603873, -0.24786416), Vector3(0.018377997, -0.27112886, -0.24786416), Vector3(0.049452513, -0.20609188, -0.24786416), Vector3(0.057248414, -0.19639426, -0.24786416), Vector3(0.056939602, -0.18398035, -0.24786416)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("PP_Mesh:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.12503788, 0.31126451, 0.5719818, 0.74490654, 0.86, 1.03, 1.16, 1.32, 1.33, 1.5000035),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(-0.11625988, 0.045370784, -0.005266678), Vector3(-0.44438303, 0.049915783, -0.021473559), Vector3(-0.6806405, 0.05799803, -0.03652255), Vector3(-0.6828732, 0.01725452, 0.03982796), Vector3(-0.40511546, 0.06162261, -0.042898223), Vector3(-0.1992218, 0.06793374, -0.08096649), Vector3(-0.1475736, 0.067320876, -0.077415474), Vector3(-0.14757362, 0.067320876, -0.07741547), Vector3(0.12034045, 0.17484678, -0.030144632), Vector3(0.120340444, 0.17484678, -0.030144632), Vector3(0, 0.005654869, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("MuzzleFlash:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.93, 1.45, 1.5000035),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(0.18163659, -0.1032722, -0.45649913), Vector3(-0.0029118508, -0.1032722, -0.52027), Vector3(0.015227273, -0.1032722, -0.52027), Vector3(0.015227273, -0.05498022, -0.52027)]
+}
+
+[sub_resource type="Animation" id="Animation_aougp"]
+resource_name = "pistol_unaim"
+length = 1.5000035
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Makarov_Mesh:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.20000005, 0.39999998, 0.53333336, 0.7, 0.9, 1.0333333, 1.2, 1.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(0.013615038, -0.16978902, -0.19438446), Vector3(0.013615038, -0.18186617, -0.19288167), Vector3(0.013615038, -0.19743884, -0.18169305), Vector3(0.013615038, -0.21424115, -0.1796023), Vector3(0.03788158, -0.24536547, -0.17572942), Vector3(0.08033088, -0.236076, -0.17688537), Vector3(0.13419026, -0.21100962, -0.18000445), Vector3(0.1818636, -0.20170492, -0.18116224), Vector3(0.2206522, -0.20789552, -0.18039194)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Makarov_Mesh:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.20000005, 0.39999998, 0.53333336, 0.5347365, 0.7, 0.7023405, 0.7050008, 0.9, 1.0333333, 1.2, 1.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(0.052342534, 3.1415925, -1.2541996e-08), Vector3(0.11636119, 3.1415925, -2.2215188e-08), Vector3(0.26637223, 3.1415925, -4.4935007e-08), Vector3(0.5138076, 3.1415925, -8.326859e-08), Vector3(0.116727725, 3.1415925, -2.4474318e-08), Vector3(0.5138076, 3.1415925, -8.3268596e-08), Vector3(0.38243672, 3.1415925, -6.194896e-08), Vector3(0.33545244, 3.1415925, -5.4898994e-08), Vector3(-0.21167351, 3.1415925, 3.1770323e-08), Vector3(0.15554374, 3.1415925, -2.3677707e-08), Vector3(3.5910378e-29, 3.1415925, 4.280379e-15), Vector3(0, 3.1415925, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("PP_Mesh:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.02942133, 0.14632092, 0.24475501, 0.35117024, 0.5001515, 0.7821519, 1.0056238, 1.4552281, 1.5000035),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(-0.02016376, -0.18783611, -0.21222344), Vector3(-0.02016376, -0.21456248, -0.2088978), Vector3(0.010004841, -0.21456242, -0.2088978), Vector3(0.074090905, -0.21456236, -0.2088978), Vector3(0.087608986, -0.192379, -0.21165812), Vector3(0.10496954, -0.15629339, -0.21614835), Vector3(0.13942204, -0.1630848, -0.22438982), Vector3(0.19920842, -0.20215845, -0.22103497), Vector3(0.19920842, -0.20215845, -0.26669556)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("PP_Mesh:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.02942133, 0.14632092, 0.7821519, 1.0056238, 1.4552281, 1.48),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(-0.08636842, 0.051596437, -0.18103209), Vector3(-0.20346124, 0.05248756, -0.18719244), Vector3(0.11388678, 0.0517394, -0.17069252), Vector3(0.058058303, 0.05149075, -0.17358695), Vector3(-0.11625988, 0.045370784, -0.005266678), Vector3(0, 0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("MuzzleFlash:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 1.45),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(-0.002867967, -0.1032722, -0.45649913), Vector3(0.19593452, -0.1032722, -0.45649913)]
+}
+
+[sub_resource type="Animation" id="Animation_ov54e"]
+resource_name = "pps_reload"
+length = 3.2333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PP_Mesh:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2647319, 0.50785303, 0.7509742, 0.9454711, 1.1129546, 1.3344649, 1.4965457, 1.7612776, 1.9665799, 2.2042983, 2.3123522, 2.420406, 2.647319, 2.8310106, 3.020105),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(0.20220134, -0.18896037, -0.25012282), Vector3(0.20220134, -0.23421067, -0.25324774), Vector3(0.19285735, -0.23421067, -0.28379828), Vector3(0.17506018, -0.23421067, -0.28379828), Vector3(0.17907384, -0.22805905, -0.28379828), Vector3(0.17907384, -0.23331785, -0.28379828), Vector3(0.17907384, -0.23331785, -0.28379828), Vector3(0.17202747, -0.23691571, -0.28379828), Vector3(0.16707763, -0.23691571, -0.28379828), Vector3(0.17114928, -0.23691571, -0.28379828), Vector3(0.17161658, -0.23728836, -0.28379828), Vector3(0.17161658, -0.23020685, -0.28379828), Vector3(0.17161658, -0.23549235, -0.28379828), Vector3(0.19692296, -0.23549235, -0.28379828), Vector3(0.21466959, -0.23549235, -0.28379828), Vector3(0.20220134, -0.18896037, -0.25012282)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PP_Mesh:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2647319, 0.50785303, 0.7509742, 0.9454711, 1.3344649, 1.4965457, 1.7612776, 1.9665799, 2.2042983, 2.647319, 2.8310106, 3.020105),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(0, 0, 0), Vector3(0.4348488, 0, 0), Vector3(0.73768985, 0.24356993, 0.08125507), Vector3(0.73769, 0.6370719, 0.08125505), Vector3(0.7376899, 0.63707197, 0.08125505), Vector3(0.7376899, 0.51973355, 0.08125508), Vector3(0.7871493, 0.5476492, 0.12165786), Vector3(0.7932591, 0.53741705, 0.10725664), Vector3(0.8096776, 0.5079912, 0.0662993), Vector3(0.94341284, 0.6083632, 0.19653459), Vector3(0.26145372, 0.35469523, -0.22143927), Vector3(0.119468, 0.27736333, 0.12823695), Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("PP_Mesh/PPS_Magazine:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.72936344, 0.83201456, 1.0643303, 1.4857403, 1.6370157, 1.998996, 2.2853386, 2.4636276, 3.0666666),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(0, -3.1359055, 0), Vector3(0, -3.1359055, 0), Vector3(-3.0479836e-08, -3.1359053, 0), Vector3(-3.0649325e-08, -3.1359053, -2.9802315e-08), Vector3(2.9801846e-08, -3.1359055, 5.9604623e-08), Vector3(2.9462871e-08, -3.1359055, 2.9802312e-08), Vector3(5.94342e-08, -3.1359055, 2.9802312e-08), Vector3(1.7864156e-07, -3.1359055, 0), Vector3(1.7872628e-07, -3.1359055, 4.470347e-08), Vector3(0, -3.1359055, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("PP_Mesh/PPS_Magazine:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.72936344, 0.83201456, 1.0643303, 1.4857403, 1.6370157, 1.998996, 2.2853386, 2.4636276, 3.0666666),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(-0.009561918, 0.08478451, -0.11897508), Vector3(-0.009561918, 0.08478451, -0.11897508), Vector3(-0.04831931, 0.012127876, -0.10101223), Vector3(-0.19689596, -0.37280363, 0.15245986), Vector3(-0.13146663, -0.11707279, -0.059639096), Vector3(-0.10295686, -0.06152594, -0.09280938), Vector3(-0.04091713, 0.01224944, -0.11290854), Vector3(-0.033234835, 0.053759873, -0.14094865), Vector3(-0.016387463, 0.06436932, -0.1310184), Vector3(-0.009561918, 0.08478451, -0.11897508)]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(2.4333334, 3.2333),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"clic"
+}, {
+"args": [],
+"method": &"finish_reload"
+}]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("..:rotation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.57, 0.88, 1.26, 1.66, 2.07, 2.17, 2.49, 3.12),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(0, 0, 0), Vector3(0.12379622, 0, 0), Vector3(0.015463633, 0, 0), Vector3(-0.11637853, 0, 0), Vector3(0.036058526, -0.08932594, 2.7773635e-17), Vector3(-0.0469663, -0.08936653, 0.007435696), Vector3(-0.046966296, 0.005492144, 0.0074356957), Vector3(0.024885911, -0.08286029, 0.0014668966), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_v00sg"]
+resource_name = "reload"
+length = 3.0666666
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Makarov_Mesh:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.21, 0.4, 0.69, 0.99, 1.18, 1.41, 1.75, 2.03, 2.27, 2.48, 2.69, 2.81, 2.93),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(0, 3.1415925, 0), Vector3(1.4002681e-08, 3.1415925, 0.09286898), Vector3(5.209182e-08, 3.1415925, 0.34943235), Vector3(6.350721e-08, 3.1415925, 0.42612213), Vector3(8.812268e-08, 3.1415925, 0.6016324), Vector3(8.297935e-08, 3.1415925, 0.5678952), Vector3(8.674227e-08, 3.0553906, 0.6016324), Vector3(0.014658578, 3.0553813, 0.60036564), Vector3(8.812268e-08, 3.1415925, 0.6016324), Vector3(6.485316e-08, 3.1415925, 0.45338413), Vector3(3.6349892e-08, 3.1415925, 0.2827957), Vector3(2.793374e-08, 3.1415925, 0.22739896), Vector3(-3.0903927e-08, 3.1415925, -0.15376352), Vector3(-0.0011514411, 3.1206803, -0.118953705)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("..:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.23, 0.49, 0.76, 1.28, 1.73, 2.2, 2.65, 2.9),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(0, 0, 0), Vector3(0.17456783, 0, -0.0075223697), Vector3(0.0535816, 1.1013832e-10, -0.007522371), Vector3(-0.154898, 0.038222715, -0.0075223707), Vector3(-0.21257344, 0.038634907, -0.009777512), Vector3(-0.074356966, 0.03786955, -0.0044372003), Vector3(-0.117104195, 0.038025398, -0.0060674697), Vector3(0.076715484, 0.037876297, 0.0012816326), Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("..:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.23, 2.9),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0.0077293525), Vector3(0, 0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("PP_Mesh:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.2647319, 0.50785303, 0.7509742, 0.9454711, 1.1129546, 1.3344649, 1.4965457, 1.7612776, 1.9665799, 2.2042983, 2.3123522, 2.420406, 2.647319, 2.8310106, 3.020105),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(0.20220134, -0.18896037, -0.25012282), Vector3(0.20220134, -0.23421067, -0.25324774), Vector3(0.19285735, -0.23421067, -0.28379828), Vector3(0.17506018, -0.23421067, -0.28379828), Vector3(0.17907384, -0.22805905, -0.28379828), Vector3(0.17907384, -0.23331785, -0.28379828), Vector3(0.17907384, -0.23331785, -0.28379828), Vector3(0.17202747, -0.23691571, -0.28379828), Vector3(0.16707763, -0.23691571, -0.28379828), Vector3(0.17114928, -0.23691571, -0.28379828), Vector3(0.17161658, -0.23728836, -0.28379828), Vector3(0.17161658, -0.23020685, -0.28379828), Vector3(0.17161658, -0.23549235, -0.28379828), Vector3(0.19692296, -0.23549235, -0.28379828), Vector3(0.21466959, -0.23549235, -0.28379828), Vector3(0.20220134, -0.18896037, -0.25012282)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("PP_Mesh:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.2647319, 0.50785303, 0.7509742, 0.9454711, 1.3344649, 1.4965457, 1.7612776, 1.9665799, 2.2042983, 2.647319, 2.8310106, 3.020105),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(0, 0, 0), Vector3(0.4348488, 0, 0), Vector3(0.73768985, 0.24356993, 0.08125507), Vector3(0.73769, 0.6370719, 0.08125505), Vector3(0.7376899, 0.63707197, 0.08125505), Vector3(0.7376899, 0.51973355, 0.08125508), Vector3(0.7871493, 0.5476492, 0.12165786), Vector3(0.7932591, 0.53741705, 0.10725664), Vector3(0.8096776, 0.5079912, 0.0662993), Vector3(0.94341284, 0.6083632, 0.19653459), Vector3(0.26145372, 0.35469523, -0.22143927), Vector3(0.119468, 0.27736333, 0.12823695), Vector3(0, 0, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Makarov_Mesh/Cube_003:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.033333335, 0.75, 1.08, 1.4, 1.61, 1.63, 1.81, 2.2, 2.36, 2.51, 2.66, 2.9833333),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(0, 0.056971446, 0.023913115), Vector3(-0.007811725, -0.1766969, 0.02701509), Vector3(-0.0143041015, -0.29706204, 0.02701509), Vector3(0.01805988, -0.31928122, 0.02701509), Vector3(0.12913236, -0.66130835, 0.02701503), Vector3(0.21994483, -1.0329028, 0.02701503), Vector3(0.19829276, -0.5851763, 0.02701503), Vector3(-0.01479286, -0.2775547, 0.027015269), Vector3(0.0067130327, -0.2089907, 0.020212948), Vector3(0.00030267553, -0.06513739, 0.020212948), Vector3(0.00028902292, 0.056235433, 0.020212948), Vector3(0, 0.056971446, 0.023913115)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Makarov_Mesh/Cube_003:rotation")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.75, 1.08, 1.4, 1.61, 1.63, 1.81, 2.2, 2.36, 2.51, 2.66, 2.95),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(0, 0, 0), Vector3(-3.552714e-15, 1.0587914e-22, -2.9802326e-08), Vector3(-1.1546324e-14, 5.029262e-22, -2.9802337e-08), Vector3(-1.4724623e-07, 1.0402765e-07, -1.0834305), Vector3(-0.013968683, -0.018187989, -0.39688072), Vector3(-0.013968684, -0.018187987, -0.39688072), Vector3(-0.013968683, -0.018187987, -0.39688072), Vector3(-0.0056258705, -0.022231944, 0.010170205), Vector3(-0.005625871, -0.022231959, 0.010170115), Vector3(-0.0056258696, -0.022231955, 0.0101701915), Vector3(-0.005625872, -0.022231957, 0.010170194), Vector3(0, 0, 0)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Makarov_Mesh:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.21, 0.4, 0.99, 1.27, 1.61, 1.78, 2.03, 2.27, 2.48, 2.62, 2.69, 2.81, 2.9333334),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(0.19798198, -0.21477932, -0.2110013), Vector3(0.17401537, -0.23421639, -0.2110013), Vector3(0.09858775, -0.21477932, -0.22408475), Vector3(0.10426247, -0.21477932, -0.23205946), Vector3(0.11782047, -0.20295554, -0.23205946), Vector3(0.101459175, -0.20295554, -0.23205946), Vector3(0.1099973, -0.21631813, -0.23205946), Vector3(0.1099973, -0.21035695, -0.23205946), Vector3(0.1099973, -0.21484238, -0.23205946), Vector3(0.1099973, -0.23567343, -0.23205946), Vector3(0.138454, -0.23567343, -0.23205946), Vector3(0.14735265, -0.23567343, -0.23205946), Vector3(0.22352746, -0.21886969, -0.23205946), Vector3(0.2206522, -0.21432465, -0.23205946)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("PP_Mesh/PPS_Magazine:rotation")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 0.72936344, 0.83201456, 1.0643303, 1.4857403, 1.6370157, 1.998996, 2.2853386, 2.4636276, 3.0666666),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(0, -3.1359055, 0), Vector3(0, -3.1359055, 0), Vector3(-3.0479836e-08, -3.1359053, 0), Vector3(-3.0649325e-08, -3.1359053, -2.9802315e-08), Vector3(2.9801846e-08, -3.1359055, 5.9604623e-08), Vector3(2.9462871e-08, -3.1359055, 2.9802312e-08), Vector3(5.94342e-08, -3.1359055, 2.9802312e-08), Vector3(1.7864156e-07, -3.1359055, 0), Vector3(1.7872628e-07, -3.1359055, 4.470347e-08), Vector3(0, -3.1359055, 0)]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("PP_Mesh/PPS_Magazine:position")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0, 0.72936344, 0.83201456, 1.0643303, 1.4857403, 1.6370157, 1.998996, 2.2853386, 2.4636276, 3.0666666),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(-0.009561918, 0.08478451, -0.11897508), Vector3(-0.009561918, 0.08478451, -0.11897508), Vector3(-0.04831931, 0.012127876, -0.10101223), Vector3(-0.19689596, -0.37280363, 0.15245986), Vector3(-0.13146663, -0.11707279, -0.059639096), Vector3(-0.10295686, -0.06152594, -0.09280938), Vector3(-0.04091713, 0.01224944, -0.11290854), Vector3(-0.033234835, 0.053759873, -0.14094865), Vector3(-0.016387463, 0.06436932, -0.1310184), Vector3(-0.009561918, 0.08478451, -0.11897508)]
+}
+
+[sub_resource type="Animation" id="Animation_1u7qd"]
+resource_name = "shoot"
+
+[sub_resource type="Animation" id="Animation_c6euj"]
+resource_name = "unaim"
+length = 1.5000035
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("..:fov")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.0333333, 0.17026435, 0.3, 0.5320761, 0.76666665, 0.9683785, 1.1918504, 1.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [58.0, 61.0, 61.5, 64.0, 66.5, 75.0, 83.0, 89.0]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(1.4666667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"enable_parfizan_fov"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_lxkhp"]
+_data = {
+&"RESET": SubResource("Animation_lxkhp"),
+&"aim": SubResource("Animation_1552c"),
+&"makarov_reload": SubResource("Animation_6k07c"),
+&"null_pps_reload": SubResource("Animation_ls2h8"),
+&"pew": SubResource("Animation_xrsio"),
+&"pistol_aim": SubResource("Animation_hbmbl"),
+&"pistol_unaim": SubResource("Animation_aougp"),
+&"pps_reload": SubResource("Animation_ov54e"),
+&"reload": SubResource("Animation_v00sg"),
+&"shoot": SubResource("Animation_1u7qd"),
+&"unaim": SubResource("Animation_c6euj")
+}
+
+[sub_resource type="Animation" id="Animation_i3mcw"]
+resource_name = "aim"
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"values": []
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("..:fov")
+tracks/1/interp = 0
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.12769827, 0.23333333, 0.47620812, 0.7, 0.86994445, 1.0333333, 1.202492, 1.370096, 1.3727564),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [75.0, 73.0, 71.0, 68.0, 66.5, 63.0, 61.5, 59.0, 61.5, 58.0]
+}
+
+[sub_resource type="Animation" id="Animation_2ubwf"]
+resource_name = "unaim"
+length = 1.5000035
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("..:fov")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.0333333, 0.17026435, 0.3, 0.5320761, 0.76666665, 0.9683785, 1.1918504, 1.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [58.0, 61.0, 61.5, 64.0, 66.5, 75.0, 83.0, 89.0]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(1.4666667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"enable_parfizan_fov"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ls2h8"]
+_data = {
+&"aim": SubResource("Animation_i3mcw"),
+&"unaim": SubResource("Animation_2ubwf")
+}
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nr340"]
+resource_local_to_scene = true
+size = Vector3(0.555, 0.5, 1.2)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_iwpo4"]
+resource_local_to_scene = true
+radius = 0.1
+height = 0.45
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_cvunv"]
+resource_local_to_scene = true
+radius = 0.12
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_o7tup"]
+resource_local_to_scene = true
+radius = 0.1
+height = 0.45
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_nr340"]
+resource_local_to_scene = true
+radius = 0.1
+height = 0.45
+
+[node name="Player" type="CharacterBody3D" unique_id=72126381]
+collision_layer = 3
+collision_mask = 3
+platform_floor_layers = 4294967043
+platform_wall_layers = 3
+safe_margin = 0.01
+script = ExtResource("1_iwpo4")
+
+[node name="Head" type="Node3D" parent="." unique_id=702943879]
+transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0, 0.72218, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Head" unique_id=1154088066]
+transform = Transform3D(1.0000001, 0, 0, 0, 1.0000001, 0, 0, 0, 1.0000001, 0, -0.011896312, 0)
+fov = 63.0
+
+[node name="CanvasLayer" type="CanvasLayer" parent="Head/Camera3D" unique_id=499521242]
+
+[node name="blood_rect" type="ColorRect" parent="Head/Camera3D/CanvasLayer" unique_id=256676560]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.18431373, 0, 0.023529412, 0)
+
+[node name="HealthBar" type="TextureProgressBar" parent="Head/Camera3D/CanvasLayer" unique_id=1431695259]
+offset_left = 29.0
+offset_top = 179.0
+offset_right = 39.0
+offset_bottom = 404.0
+step = 0.1
+fill_mode = 3
+texture_under = ExtResource("2_ix3jf")
+texture_progress = ExtResource("2_ls2h8")
+
+[node name="StaminaBar" type="TextureProgressBar" parent="Head/Camera3D/CanvasLayer" unique_id=666547604]
+offset_left = 36.0
+offset_top = 472.0
+offset_right = 336.0
+offset_bottom = 500.0
+texture_progress = SubResource("PlaceholderTexture2D_cthcg")
+
+[node name="BackBufferCopy" type="BackBufferCopy" parent="Head/Camera3D/CanvasLayer" unique_id=1709624472]
+rect = Rect2(0, 0, 0, 0)
+
+[node name="ColorRect" type="ColorRect" parent="Head/Camera3D/CanvasLayer" unique_id=868450983]
+material = SubResource("ShaderMaterial_nr340")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="sorry" type="ColorRect" parent="Head/Camera3D/CanvasLayer" unique_id=1819297249]
+material = SubResource("ShaderMaterial_v00sg")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="Head/Camera3D/CanvasLayer" unique_id=775388445]
+visible = false
+anchors_preset = -1
+anchor_left = 0.148
+anchor_top = 0.71500003
+anchor_right = 0.148
+anchor_bottom = 0.71500003
+offset_left = 233.504
+offset_top = -238.32
+offset_right = 456.50403
+offset_bottom = 44.679993
+text = "move-WASD
+run-shift
+sprint-V
+charge-R
+shoot-LBM 	   	PRESS K TO
+reload-MBM	   	UPLOAD THIS
+aim-RBM
+dive-F
+kick-E
+look-Z/C
+prone-X
+slide-ctrl"
+label_settings = SubResource("LabelSettings_6k07c")
+
+[node name="PauseMenu" type="Control" parent="Head/Camera3D/CanvasLayer" unique_id=1806642773]
+process_mode = 2
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_c6euj")
+
+[node name="ColorRect" type="ColorRect" parent="Head/Camera3D/CanvasLayer/PauseMenu" unique_id=2041400344]
+material = SubResource("ShaderMaterial_hbmbl")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = 2.0
+offset_right = 1.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Head/Camera3D/CanvasLayer/PauseMenu" unique_id=981692574]
+layout_mode = 0
+offset_left = 42.0
+offset_top = 52.0
+offset_right = 472.0
+offset_bottom = 113.0
+
+[node name="QuitButton" type="TextureButton" parent="Head/Camera3D/CanvasLayer/PauseMenu/VBoxContainer" unique_id=901237564]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+texture_normal = SubResource("PlaceholderTexture2D_c6euj")
+texture_pressed = SubResource("PlaceholderTexture2D_hbmbl")
+
+[node name="WeaponContainer" type="Node3D" parent="Head/Camera3D" unique_id=1970996343]
+script = ExtResource("4_6k07c")
+
+[node name="MuzzleFlash" type="GPUParticles3D" parent="Head/Camera3D/WeaponContainer" unique_id=1494582400]
+transform = Transform3D(-0.19999996, 0, 3.0199153e-08, -2.220446e-16, 0.19999994, 0, -3.0199153e-08, 0, -0.19999996, 0.18163659, -0.1032722, -0.45649913)
+emitting = false
+amount = 4
+lifetime = 0.04
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 0
+process_material = SubResource("ParticleProcessMaterial_cthcg")
+draw_pass_1 = SubResource("BoxMesh_86qqj")
+
+[node name="WallSparks" type="GPUParticles3D" parent="Head/Camera3D/WeaponContainer" unique_id=436094241]
+transform = Transform3D(-0.19999996, 0, 1.7484552e-08, 0, 0.19999994, 0, -1.7484552e-08, 0, -0.19999996, 0.18659315, -0.08152884, -0.54980344)
+emitting = false
+amount = 13
+lifetime = 0.36
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 0
+process_material = SubResource("ParticleProcessMaterial_cthcg")
+draw_pass_1 = SubResource("BoxMesh_86qqj")
+
+[node name="PP_Mesh" parent="Head/Camera3D/WeaponContainer" unique_id=857265169 instance=ExtResource("6_v00sg")]
+transform = Transform3D(0.7300001, 0, 0, 0, 0.72999626, 0, 0, 0, 0.72999656, 0.20220134, -0.18896037, -0.25012282)
+
+[node name="PPS_body" parent="Head/Camera3D/WeaponContainer/PP_Mesh" index="0" unique_id=1321546564]
+material_override = SubResource("ShaderMaterial_1552c")
+
+[node name="Cube_001" parent="Head/Camera3D/WeaponContainer/PP_Mesh" index="1" unique_id=2000916284]
+material_override = SubResource("ShaderMaterial_1552c")
+
+[node name="ouch" parent="Head/Camera3D/WeaponContainer/PP_Mesh" index="2" unique_id=1791047989]
+material_override = SubResource("ShaderMaterial_1552c")
+
+[node name="PPS_Magazine" parent="Head/Camera3D/WeaponContainer/PP_Mesh" index="3" unique_id=80998375]
+transform = Transform3D(-0.9999842, 0, -0.0056871185, 0, 1.0000001, 0, 0.0056871204, 0, -0.99998385, -0.009561918, 0.08478451, -0.11897508)
+material_override = SubResource("ShaderMaterial_1552c")
+
+[node name="Cube_004" parent="Head/Camera3D/WeaponContainer/PP_Mesh" index="4" unique_id=1950039611]
+material_override = SubResource("ShaderMaterial_1552c")
+
+[node name="Cube_005" parent="Head/Camera3D/WeaponContainer/PP_Mesh" index="5" unique_id=1391030188]
+material_override = SubResource("ShaderMaterial_1552c")
+
+[node name="Cube_006" parent="Head/Camera3D/WeaponContainer/PP_Mesh" index="6" unique_id=533080200]
+material_override = SubResource("ShaderMaterial_1552c")
+
+[node name="PPRay" type="RayCast3D" parent="Head/Camera3D/WeaponContainer/PP_Mesh" unique_id=108879268]
+transform = Transform3D(1, 3.4924597e-10, -3.7252903e-08, 0, 1.0000011, 1.3038516e-08, -4.8428774e-08, 3.7252903e-09, 1.0000017, -0.01666087, 0.17888516, -0.40634733)
+target_position = Vector3(0, 0, -50)
+
+[node name="Makarov_Mesh" parent="Head/Camera3D/WeaponContainer" unique_id=705739185 instance=ExtResource("9_1u7qd")]
+transform = Transform3D(-0.41499972, 0, 6.266323e-08, 0, 0.41499957, 0, -6.266322e-08, 0, -0.4149998, 0.19798198, -0.21477932, -0.2110013)
+
+[node name="Cube" parent="Head/Camera3D/WeaponContainer/Makarov_Mesh" index="0" unique_id=632846741]
+material_override = SubResource("ShaderMaterial_c6euj")
+
+[node name="Cube_001" parent="Head/Camera3D/WeaponContainer/Makarov_Mesh" index="1" unique_id=832752951]
+material_override = SubResource("ShaderMaterial_c6euj")
+
+[node name="Cube_002" parent="Head/Camera3D/WeaponContainer/Makarov_Mesh" index="2" unique_id=2014234684]
+material_override = SubResource("ShaderMaterial_c6euj")
+
+[node name="Cube_003" parent="Head/Camera3D/WeaponContainer/Makarov_Mesh" index="3" unique_id=170773876]
+transform = Transform3D(0.9999996, 0, 0, 0, 0.99999934, 0, 0, 0, 1.0000002, 0.0067130327, 0.03210318, 0.020212948)
+material_override = SubResource("ShaderMaterial_c6euj")
+
+[node name="MakarovRay" type="RayCast3D" parent="Head/Camera3D/WeaponContainer/Makarov_Mesh" unique_id=685432534]
+transform = Transform3D(1, -7.1054274e-15, 0, -5.3290705e-15, 0.9999994, -5.2154064e-08, 0, -2.2351742e-08, 1, 8.940697e-08, 0.29050004, 0.52921796)
+target_position = Vector3(0, 0, 90)
+
+[node name="suicd" type="AnimationPlayer" parent="Head/Camera3D/WeaponContainer" unique_id=2049650905]
+libraries/ = SubResource("AnimationLibrary_lxkhp")
+
+[node name="fuc" type="AudioStreamPlayer" parent="Head/Camera3D/WeaponContainer" unique_id=1903508061]
+stream = ExtResource("7_1u7qd")
+pitch_scale = 1.99
+
+[node name="tik" type="AudioStreamPlayer" parent="Head/Camera3D/WeaponContainer" unique_id=367917106]
+stream = ExtResource("8_6k07c")
+volume_db = 3.115
+pitch_scale = 0.9
+
+[node name="camera" type="AnimationPlayer" parent="Head/Camera3D/WeaponContainer" unique_id=409046818]
+libraries/ = SubResource("AnimationLibrary_ls2h8")
+
+[node name="click" type="AudioStreamPlayer" parent="Head/Camera3D/WeaponContainer" unique_id=1321707406]
+stream = ExtResource("12_aougp")
+
+[node name="pps_zatvor" type="AudioStreamPlayer" parent="Head/Camera3D/WeaponContainer" unique_id=2058880854]
+stream = ExtResource("13_2ubwf")
+
+[node name="KickCast" type="ShapeCast3D" parent="Head/Camera3D" unique_id=1370429110]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0.503, -0.6)
+shape = SubResource("BoxShape3D_nr340")
+collision_mask = 252
+collide_with_areas = true
+
+[node name="hands" type="RayCast3D" parent="Head/Camera3D" unique_id=969949881]
+target_position = Vector3(0, 0, -2)
+collision_mask = 255
+script = ExtResource("12_hbmbl")
+
+[node name="BodyHitbox" type="CollisionShape3D" parent="." unique_id=1605924694]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.008, 0.4307245, 0)
+shape = SubResource("CapsuleShape3D_iwpo4")
+
+[node name="HeadHitbox" type="CollisionShape3D" parent="." unique_id=87304326]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7193475, 0)
+shape = SubResource("SphereShape3D_cvunv")
+
+[node name="LegsHitbox" type="CollisionShape3D" parent="." unique_id=1800971238]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0, 0)
+shape = SubResource("CapsuleShape3D_o7tup")
+
+[node name="LegsHitbox2" type="CollisionShape3D" parent="." unique_id=385518021]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0, 0)
+shape = SubResource("CapsuleShape3D_nr340")
+
+[node name="CeilingRay" type="RayCast3D" parent="." unique_id=688768065]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05608082, 0)
+target_position = Vector3(0, 0.8, 0)
+collision_mask = 255
+hit_from_inside = true
+
+[node name="BackgroundMusic" type="AudioStreamPlayer" parent="." unique_id=1614239432]
+stream = ExtResource("10_ov54e")
+volume_db = -7.442
+autoplay = true
+parameters/looping = true
+
+[node name="dead" type="AudioStreamPlayer" parent="." unique_id=251572760]
+stream = ExtResource("11_ov54e")
+parameters/looping = true
+
+[node name="oh" type="AudioStreamPlayer" parent="." unique_id=499581763]
+stream = ExtResource("16_i3mcw")
+parameters/looping = true
+
+[connection signal="pressed" from="Head/Camera3D/CanvasLayer/PauseMenu/VBoxContainer/QuitButton" to="Head/Camera3D/CanvasLayer/PauseMenu" method="_on_quit_button_pressed"]
+
+[editable path="Head/Camera3D/WeaponContainer/PP_Mesh"]
+[editable path="Head/Camera3D/WeaponContainer/Makarov_Mesh"]

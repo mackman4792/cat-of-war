@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://cnk3jkeulxllk"]
+
+[ext_resource type="Script" uid="uid://bamyusntbr80l" path="res://scripts/door.gd" id="1_hpvv5"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hpvv5"]
+size = Vector3(0.145, 2, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_uvdjg"]
+size = Vector3(0.1, 1.5, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_hpvv5"]
+radius = 0.06
+height = 0.105
+
+[node name="door" type="StaticBody3D" unique_id=830462812]
+script = ExtResource("1_hpvv5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=654167729]
+shape = SubResource("BoxShape3D_hpvv5")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=350626067]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0011005402)
+mesh = SubResource("BoxMesh_uvdjg")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=827537771]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0337905, 0.07601991, -0.39846689)
+mesh = SubResource("SphereMesh_hpvv5")
