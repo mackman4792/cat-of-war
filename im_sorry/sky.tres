@@ -1,0 +1,30 @@
+[gd_resource type="AnimatedTexture" format=3 uid="uid://cuynkydxhsj6v"]
+
+[ext_resource type="Texture2D" uid="uid://gjm3pmlpoha3" path="res://im_sorry/sky.png" id="1_apbpn"]
+[ext_resource type="Texture2D" uid="uid://dkf7tpvsjuhx1" path="res://im_sorry/sky2.png" id="2_he85v"]
+[ext_resource type="Texture2D" uid="uid://dli871ypoa4t7" path="res://im_sorry/sky3.png" id="3_ayvtd"]
+[ext_resource type="Texture2D" uid="uid://bwgihqfhv1nlq" path="res://im_sorry/sky4.png" id="4_mo5hv"]
+[ext_resource type="Texture2D" uid="uid://cwj4r3doggqi" path="res://im_sorry/sky5.png" id="5_excyw"]
+[ext_resource type="Texture2D" uid="uid://drtqb8g25vmfv" path="res://im_sorry/sky6.png" id="6_j8nsb"]
+[ext_resource type="Texture2D" uid="uid://jjwdok6gnyq" path="res://im_sorry/sky7.png" id="7_jbj8d"]
+[ext_resource type="Texture2D" uid="uid://dvguofvbldsqu" path="res://im_sorry/sky0.png" id="8_2brya"]
+
+[resource]
+frames = 8
+speed_scale = 1.8
+frame_0/texture = ExtResource("1_apbpn")
+frame_0/duration = 0.08
+frame_1/texture = ExtResource("2_he85v")
+frame_1/duration = 0.36
+frame_2/texture = ExtResource("3_ayvtd")
+frame_2/duration = 0.21
+frame_3/texture = ExtResource("4_mo5hv")
+frame_3/duration = 0.38
+frame_4/texture = ExtResource("5_excyw")
+frame_4/duration = 0.43
+frame_5/texture = ExtResource("6_j8nsb")
+frame_5/duration = 0.15
+frame_6/texture = ExtResource("7_jbj8d")
+frame_6/duration = 0.11
+frame_7/texture = ExtResource("8_2brya")
+frame_7/duration = 0.22

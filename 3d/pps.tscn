@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://b7rj12uai824y"]
+
+[ext_resource type="PackedScene" uid="uid://dukik7xlpsqpn" path="res://3d/PPs.glb" id="1_p8f2p"]
+
+[node name="PPs" unique_id=857265169 instance=ExtResource("1_p8f2p")]

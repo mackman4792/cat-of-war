@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://de65dtar1ylrp"]
+
+[ext_resource type="PackedScene" uid="uid://b0a5wlf7chu8w" path="res://3d/vodka.glb" id="1_ee7ep"]
+[ext_resource type="Shader" uid="uid://dm7fjft6kj4rt" path="res://scripts/glow.gdshader" id="2_646gr"]
+[ext_resource type="Script" uid="uid://c76j87ivj052c" path="res://3d/static_body_3d.gd" id="2_xoyn0"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_646gr"]
+render_priority = 0
+shader = ExtResource("2_646gr")
+shader_parameter/outline_intensity = 0.0
+shader_parameter/glow_color = Color(0.5, 0.2, 0.05, 1)
+shader_parameter/glow_power = 4.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dm8ow"]
+render_priority = 0
+shader = ExtResource("2_646gr")
+shader_parameter/outline_intensity = 0.0
+shader_parameter/glow_color = Color(0.8, 0.5, 1, 1)
+shader_parameter/glow_power = 4.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ppymn"]
+render_priority = 0
+shader = ExtResource("2_646gr")
+shader_parameter/outline_intensity = 0.0
+shader_parameter/glow_color = Color(1, 0, 0, 1)
+shader_parameter/glow_power = 4.0
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ee7ep"]
+radius = 0.12402344
+height = 0.7409973
+
+[node name="vodka" unique_id=2090632444 instance=ExtResource("1_ee7ep")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
+
+[node name="Cube" parent="." index="0" unique_id=2068632217]
+material_overlay = SubResource("ShaderMaterial_646gr")
+
+[node name="Cube_001" parent="." index="1" unique_id=2051540696]
+material_overlay = SubResource("ShaderMaterial_dm8ow")
+
+[node name="Cube_002" parent="." index="2" unique_id=1375322868]
+material_overlay = SubResource("ShaderMaterial_ppymn")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." index="3" unique_id=1319518641]
+transform = Transform3D(0.9999998, 0, 0, 0, 0.9999998, 0, 0, 0, 0.9999998, 0, 0, 0)
+script = ExtResource("2_xoyn0")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" index="0" unique_id=1076823933]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.009460449, 0)
+shape = SubResource("CapsuleShape3D_ee7ep")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="StaticBody3D" index="1" unique_id=1083170860]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.84471595, 0)
+shape = SubResource("CapsuleShape3D_ee7ep")

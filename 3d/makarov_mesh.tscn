@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://duoivdgl7cbr3"]
+
+[ext_resource type="PackedScene" uid="uid://2gak8flsay3p" path="res://3d/Makarov_Mesh.glb" id="1_kdl74"]
+
+[node name="Makarov_Mesh" unique_id=705739185 instance=ExtResource("1_kdl74")]

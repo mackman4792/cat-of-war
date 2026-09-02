@@ -1,0 +1,83 @@
+[gd_scene format=3 uid="uid://nsk2uyhw7u5w"]
+
+[ext_resource type="Script" uid="uid://cyjwabhd2g5b8" path="res://main_menu.gd" id="1_7vrkn"]
+[ext_resource type="FontFile" uid="uid://b1or1yl4r5hqh" path="res://progoth.ttf" id="2_fu7sn"]
+[ext_resource type="Texture2D" uid="uid://dj46an3214r1q" path="res://let.png" id="2_jix8l"]
+[ext_resource type="AudioStream" uid="uid://bto37sg2sncf1" path="res://sounds/D5-the way ahead feels lonely.mp3" id="4_jix8l"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_jix8l"]
+font = ExtResource("2_fu7sn")
+font_size = 84
+
+[node name="MainMenu" type="Control" unique_id=1882862953]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_7vrkn")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1704335788]
+modulate = Color(1, 1, 1, 0.6392157)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 106.0
+offset_bottom = 72.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_jix8l")
+expand_mode = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1837128637]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 26
+theme_override_constants/margin_top = 26
+theme_override_constants/margin_right = 26
+theme_override_constants/margin_bottom = 26
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=817380224]
+layout_mode = 2
+
+[node name="GameTitle" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1320896231]
+layout_mode = 2
+text = "cat of war"
+label_settings = SubResource("LabelSettings_jix8l")
+horizontal_alignment = 1
+
+[node name="PlayButton" type="Button" parent="." unique_id=857269992]
+layout_mode = 0
+offset_left = 67.0
+offset_top = 166.0
+offset_right = 209.0
+offset_bottom = 193.0
+
+[node name="OptionsButton" type="Button" parent="." unique_id=24913102]
+layout_mode = 0
+offset_left = 66.0
+offset_top = 207.0
+offset_right = 210.0
+offset_bottom = 231.0
+
+[node name="ExitButton" type="Button" parent="." unique_id=1098829624]
+layout_mode = 0
+offset_left = 68.0
+offset_top = 246.0
+offset_right = 208.0
+offset_bottom = 273.0
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=591651347]
+stream = ExtResource("4_jix8l")
+volume_db = -25.748
+autoplay = true
+parameters/looping = true
+
+[connection signal="pressed" from="PlayButton" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="ExitButton" to="." method="_on_exit_pressed"]
