@@ -47,10 +47,10 @@ var recovery_delay: float = 0.0         # Таймер задержки пере
 const RECOIL_RECOVERY_DELAY: float = 0.15 # Задержка в секундах после выстрела
 
 const WEAPON_DATA = {
-	Weapon.PP: {"damage": 10.0, "fire_rate": 0.1, "weight": 0.10, "max_ammo": 35},
-	Weapon.MAKAROV: {"damage": 25.0, "fire_rate": 0.4, "weight": 0.0, "max_ammo": 8},
+	Weapon.PP: {"damage": 10.0, "fire_rate": 0.1, "weight": 0.10, "max_ammo": 35, "sound": "res://sounds/PPS_fire.mp3"},
+	Weapon.MAKAROV: {"damage": 25.0, "fire_rate": 0.4, "weight": 0.0, "max_ammo": 8, "sound": "res://sounds/PM_fire.mp3"},
 	Weapon.SHOVEL: {"damage": 73.0, "fire_rate": 0.9, "weight": 0.02, "max_ammo": 0}
-}
+} 
 
 var is_swing: bool = false
 const RECOIL_FORCE: float = 0.07         
@@ -91,7 +91,8 @@ var current_weapon: Weapon = Weapon.PP
 @onready var fuc: AudioStreamPlayer = $fuc 
 @onready var click: AudioStreamPlayer = $click 
 @onready var shovel_swing: AudioStreamPlayer = $shovel_swing # Твой новый сочный хлюп
-
+@onready var PPS_fire: AudioStreamPlayer = $PPS
+@onready var PM_fire: AudioStreamPlayer = $PM
 var mouse_mov_x: float = 0.0
 var mouse_mov_y: float = 0.0
 
@@ -186,12 +187,6 @@ func _physics_process(delta: float) -> void:
 	# ОБЩАЯ СТРЕЛЬБА И АТАКА ЛОПАТОЙ
 	if Input.is_action_pressed("shoot") and fire_cooldown <= 0.0 and not is_suicide_anim and not is_reloading and not is_swing:
 		if player and player.current_state != player.State.RAMMING:
-			# Макаров и Лопата бьют по одиночному клику, ППС — зажимаем ЛКМ
-			if current_weapon == Weapon.MAKAROV and not Input.is_action_just_pressed("shoot"):
-				pass 
-			elif current_weapon == Weapon.SHOVEL and not Input.is_action_just_pressed("shoot"):
-				pass 
-			else:
 				shoot_weapon()
 				fire_cooldown = WEAPON_DATA[current_weapon]["fire_rate"]
 
@@ -297,10 +292,20 @@ func _physics_process(delta: float) -> void:
 	mouse_mov_y = 0.0
 
 func shoot_weapon() -> void:
+	var data = WEAPON_DATA[current_weapon]
 	# --- БЛОК ЛОПАТЫ (БЛИЖНИЙ БОЙ) ---
 	if current_weapon == Weapon.SHOVEL:
 		_attack_with_shovel()
 		return
+	if current_weapon == Weapon.MAKAROV:
+		$PPS.volume_db = -18.0
+	else:
+		$PPS.volume_db = 0
+	if data.has("sound") and not current_ammo[current_weapon] <= 0:
+		# Напрямую загружаем трек из словаря в ноду PPS
+		$PPS.stream = load(data["sound"])
+		$PPS.play()
+
 
 	# --- БЛОК ОГНЕСТРЕЛА ---
 	if current_ammo[current_weapon] <= 0:

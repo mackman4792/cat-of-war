@@ -5,18 +5,26 @@ extends CharacterBody3D
 @export var speed: float = 4.0
 @export var damage_to_player: float = 8.0
 @export var fov_angle: float = 75.0
+@export var patrol_points: Array[Vector3] = [] 
 
+var wall_ray: RayCast3D
+var foot_wall_ray: RayCast3D 
+var cliff_ray: RayCast3D
 var strafe_timer: float = 0.0
 var strafe_dir: float = 1.0
 var _potential_player: CharacterBody3D = null
-
+var current_patrol_index: int = 0
 # НАСТРОЙКИ ПАТРУЛИРОВАНИЯ И ИИ
 @onready var shoot_timer: Timer = $ShootTimer
-@export var patrol_points: Array[Vector3] = [] 
-var current_patrol_index: int = 0
+
+var spawn_position: Vector3 = Vector3.ZERO  # Центр зоны патруля (где бот родился)
+var current_patrol_target: Vector3 = Vector3.ZERO  # Куда бот идёт прямо сейчас
+const MAX_RADIUS: float = 7.0  # Максимальный радиус круга
+const MIN_RADIUS: float = 3.0  # Минимальный радиус круга
 
 enum AIState { PATROL, CHASE, STUNNED }
 var current_ai_state: AIState = AIState.PATROL
+var safety_cooldown: float = 0.0  # Таймер безопасности для разворота
 
 # ФИЗИКА ИМПУЛЬСА (ОТЛЕТ ОТ ТАРАНА И ПИНКА)
 var knockback_velocity: Vector3 = Vector3.ZERO
@@ -33,7 +41,34 @@ func _ready() -> void:
 	if shoot_timer:
 		shoot_timer.one_shot = true
 		shoot_timer.wait_time = FIRE_RATE
+	
+	# 1. Луч для детекции стен (уровень колен)
+	wall_ray = RayCast3D.new()
+	add_child(wall_ray)
+	wall_ray.enabled = true
+	wall_ray.position = Vector3(0, 0.4, 0)
+	wall_ray.target_position = Vector3(0, 0, -1.5) 
+	wall_ray.add_exception(self)
 
+	# 2. НОВЫЙ ЛУЧ: для детекции препятствий у самого пола (уровень стоп)
+	foot_wall_ray = RayCast3D.new()
+	add_child(foot_wall_ray)
+	foot_wall_ray.enabled = true
+	foot_wall_ray.position = Vector3(0, 0.1, 0) # Совсем низко к полу
+	foot_wall_ray.target_position = Vector3(0, 0, -1.5) # Смотрит вперед на 1.5м
+	foot_wall_ray.add_exception(self) # Игнорируем себя
+	
+	# 3. Луч для детекции пропасти
+	cliff_ray = RayCast3D.new()
+	add_child(cliff_ray)
+	cliff_ray.enabled = true
+	cliff_ray.position = Vector3(0, 0.1, -0.5)
+	cliff_ray.target_position = Vector3(0, -2.0, -1.0)
+	cliff_ray.add_exception(self)
+
+	spawn_position = global_position
+	_generate_new_random_target()
+	
 func _physics_process(delta: float) -> void:
 	if health <= 0.0: return
 	
@@ -78,24 +113,57 @@ func _physics_process(delta: float) -> void:
 	# 6. Двигаем тело
 	move_and_slide()
 
-# ЛОГИКА ПАТРУЛИРОВАНИЯ
 func _process_patrol(delta: float) -> void:
-	if patrol_points.is_empty(): 
-		return
+	# Уменьшаем таймер кулдауна, если он запущен
+	if safety_cooldown > 0.0:
+		safety_cooldown -= delta
+	else:
+		safety_cooldown = 0.0
+
+	# --- ПРОВЕРКА НА СТЕНУ ИЛИ ПРОПАСTЬ ---
+	if safety_cooldown <= 0.0:
+		# Проверяем ВЕРХНИЙ луч стены (на уровне колен)
+		var hit_wall: bool = false
+		if wall_ray.is_colliding():
+			var collider = wall_ray.get_collider()
+			if collider != target_player and collider != _potential_player:
+				hit_wall = true
+
+		# Проверяем НИЖНИЙ луч стены (у самых ног)
+		if foot_wall_ray.is_colliding():
+			var collider = foot_wall_ray.get_collider()
+			if collider != target_player and collider != _potential_player:
+				hit_wall = true
+
+		# Если хоть один из лучей наткнулся на препятствие — разворачиваемся
+		if hit_wall:
+			print("[ИИ] Ноги или тело упёрлись в препятствие! Меняю курс...")
+			_generate_new_random_target()
+			safety_cooldown = 0.5 # Даем 0.5 секунды на разворот
+			return
+
+		# Проверяем луч пропасти
+		if not cliff_ray.is_colliding():
+			print("[ИИ] Впереди обрыв! Меняю курс...")
+			_generate_new_random_target()
+			safety_cooldown = 0.5
+			return
+	# --------------------------------------
+
+	# Твой стандартный код движения
+	var enemy_flat = Vector3(global_position.x, 0.0, global_position.z)
+	var target_flat = Vector3(current_patrol_target.x, 0.0, current_patrol_target.z)
 	
-	var target_pos = patrol_points[current_patrol_index]
-	var dir = (target_pos - global_position)
-	dir.y = 0.0
+	var dir = (target_flat - enemy_flat)
 	
 	if dir.length() < 0.5:
-		current_patrol_index += 1
-		if current_patrol_index >= patrol_points.size():
-			current_patrol_index = 0
+		_generate_new_random_target()
 	else:
 		dir = dir.normalized()
 		_smooth_look_at(global_position + dir, delta)
 		velocity.x = dir.x * speed
 		velocity.z = dir.z * speed
+
 
 # ЛОГИКА ПРЕСЛЕДОВАНИЯ И СТРЕЙФА (Интегрирована первая часть вашего кода)
 func _process_chase(delta: float) -> void:
@@ -155,7 +223,7 @@ func _shoot_at_player() -> void:
 	
 	if $RayCastCenter.is_colliding() and $RayCastCenter.get_collider() == target_player:
 		fire_cooldown = FIRE_RATE
-		print("[ИИ УЗЕЛ] Честное попадание по Артёму!")
+		print("[ИИ УЗЕЛ] Честное попадание по игроку!")
 		if target_player.has_method("take_damage"):
 			target_player.take_damage(damage_to_player)
 
@@ -181,7 +249,7 @@ func _check_vision_cone_logic(_delta: float) -> void:
 		if _is_player_in_cone_vision():
 			target_player = _potential_player
 			current_ai_state = AIState.CHASE
-			print("НАЦИСТ НАПРЯМУЮ ЗАМЕТИЛ АРТЁМА В КОНУСЕ ОБЗОРА! Перехожу в CHASE.")
+			print("НАЦИСТ НАПРЯМУЮ ЗАМЕТИЛ ИГРОКА В КОНУСЕ ОБЗОРА! Перехожу в CHASE.")
 
 func _is_player_in_cone_vision() -> bool:
 	var current_target = target_player if target_player else _potential_player
@@ -274,12 +342,27 @@ func _find_player_globally() -> void:
 		
 		if found_player:
 			target_player = found_player as CharacterBody3D
-			print("Бот взломал реальность и нашёл Артёма по имени узла!")
+			print("Бот взломал реальность и нашёл тебя по имени узла!")
 
 func _smooth_look_at(target: Vector3, delta: float) -> void:
 	if global_position.is_equal_approx(target): return
 	var look_transform = global_transform.looking_at(target, Vector3.UP)
 	global_transform.basis = global_transform.basis.slerp(look_transform.basis, 6.0 * delta)
+func _generate_new_random_target() -> void:
+	# Случайный угол в радианах (от 0 до 360 градусов)
+	var random_angle = randf_range(0.0, TAU) 
+	# Случайный радиус от 3 до 7 метров
+	var random_distance = randf_range(MIN_RADIUS, MAX_RADIUS)
+	
+	# Считаем смещение по X и Z относительно центра спавна
+	var offset = Vector3(
+		cos(random_angle) * random_distance,
+		0.0,
+		sin(random_angle) * random_distance
+	)
+	
+	current_patrol_target = spawn_position + offset
+	print("[ИИ] Выбрал новую случайную точку на расстоянии: ", snapped(random_distance, 0.1), "м")
 
 func _die() -> void:
 	print("да блинаа :(")

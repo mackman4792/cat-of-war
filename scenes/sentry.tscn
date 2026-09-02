@@ -1,7 +1,7 @@
-[gd_scene format=4 uid="uid://c8ytghbmcelgi"]
+[gd_scene format=4 uid="uid://bvv5edp15a4od"]
 
-[ext_resource type="Script" uid="uid://bxko4axt3wwu8" path="res://scripts/enemy.gd" id="1_7p1mj"]
-[ext_resource type="Shader" uid="uid://bmmrj0wi68ltf" path="res://scripts/ps1_jitter.gdshader" id="2_md0e3"]
+[ext_resource type="Script" uid="uid://nitn7ddwr5b" path="res://scripts/enemy_sentry.gd" id="1_60hbs"]
+[ext_resource type="Shader" uid="uid://bmmrj0wi68ltf" path="res://scripts/ps1_jitter.gdshader" id="2_1dloa"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_md0e3"]
 radius = 0.241
@@ -9,7 +9,7 @@ height = 1.474
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4ra3w"]
 render_priority = 0
-shader = ExtResource("2_md0e3")
+shader = ExtResource("2_1dloa")
 shader_parameter/jitter_strength = 0.5
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_4ra3w"]
@@ -26,7 +26,7 @@ height = 0.5
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_md0e3"]
 render_priority = 0
-shader = ExtResource("2_md0e3")
+shader = ExtResource("2_1dloa")
 shader_parameter/jitter_strength = 0.5
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jc01t"]
@@ -111,8 +111,7 @@ radius = 0.28
 [node name="CharacterBody3D" type="CharacterBody3D" unique_id=42211483]
 collision_layer = 14
 collision_mask = 14
-script = ExtResource("1_7p1mj")
-patrol_points = Array[Vector3]([Vector3(0, 0, 4)])
+script = ExtResource("1_60hbs")
 
 [node name="body" type="CollisionShape3D" parent="." unique_id=1142779511]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00910902, -0.10176247, 0)
