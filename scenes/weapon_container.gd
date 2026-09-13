@@ -1,15 +1,18 @@
 extends Node3D
-
+class_name gun
 # --- НАСТРОЙКИ СВЕЯ (ПОКАЧИВАНИЯ) ОРУЖИЯ ---
-const SWAY_AMOUNT = 0.03
-const SWAY_MAX_AMOUNT = 0.06
-const SWAY_SMOOTH = 4.0
+const SWAY_AMOUNT: float = 0.03
+const SWAY_MAX_AMOUNT: float = 0.06
+const SWAY_SMOOTH: float = 4.0
 const ROTATION_SWAY_AMOUNT = 0.05
 const ROTATION_SMOOTH = 5.0
-
 var is_suicide_anim: bool = false
 var is_reloading: bool = false    # Блокирует стрельбу при смене магазина
 var is_aiming: bool = false       # Режим прицеливания
+var current_mags: Dictionary = {
+	Weapon.PP: 5,
+	Weapon.MAKAROV: 7
+}
 
 # --- НАСТРОЙКИ СУРОВОЙ ОТДАЧИ И РАЗБРОСА ---
 const BASE_SPREAD: float = 0.015       # Базовый разброс (когда стоим на месте)
@@ -22,7 +25,7 @@ const ADRENALINE_TIME_SCALE: float = 0.9     # Скорость времени �
 const ADRENALINE_SMOOTH_SPEED: float = 4.0   # Скорость плавного перехода времени
 
 # Индивидуальные настройки для каждого ствола
-const RECOIL_DATA = {
+const RECOIL_DATA: Dictionary = {
 	Weapon.PP: {
 		"up": 0.04, 
 		"side": 0.02, 
@@ -46,10 +49,10 @@ var recovery_speed: float = 2.0         # Снизили скорость (бы�
 var recovery_delay: float = 0.0         # Таймер задержки перед началом возврата
 const RECOIL_RECOVERY_DELAY: float = 0.15 # Задержка в секундах после выстрела
 
-const WEAPON_DATA = {
-	Weapon.PP: {"damage": 10.0, "fire_rate": 0.1, "weight": 0.10, "max_ammo": 35, "sound": "res://sounds/PPS_fire.mp3"},
-	Weapon.MAKAROV: {"damage": 25.0, "fire_rate": 0.4, "weight": 0.0, "max_ammo": 8, "sound": "res://sounds/PM_fire.mp3"},
-	Weapon.SHOVEL: {"damage": 73.0, "fire_rate": 0.9, "weight": 0.02, "max_ammo": 0}
+const WEAPON_DATA: Dictionary = {
+	Weapon.PP: {"damage": 10.0, "fire_rate": 0.1, "weight": 0.10, "max_ammo": 35, "sound": "res://sounds/PPS_fire.mp3", "max_mags": 5, "sound_radius": 25.0},
+	Weapon.MAKAROV: {"damage": 25.0, "fire_rate": 0.4, "weight": 0.0, "max_ammo": 8, "sound": "res://sounds/PM_fire.mp3", "max_mags": 7, "sound_radius": 5.0},
+	Weapon.SHOVEL: {"damage": 73.0, "fire_rate": 1.0, "weight": 0.02, "max_ammo": 0, "sound_radius": 2.0}
 } 
 
 var is_swing: bool = false
@@ -59,7 +62,7 @@ var fire_cooldown: float = 0.0
 
 # --- ТЕКУЩИЕ ПАТРОНЫ В МАГАЗИНАХ ---
 # Лопату сюда не пишем, у неё бесконечный боезапас
-var current_ammo = {
+var current_ammo: Dictionary = {
 	Weapon.PP: 35,
 	Weapon.MAKAROV: 8
 }
@@ -69,6 +72,7 @@ enum Weapon { MAKAROV, PP, SHOVEL }
 var current_weapon: Weapon = Weapon.PP 
 
 # --- ССЫЛКИ НА УЗЛЫ СЦЕНЫ (СВЯЗЫВАНИЕ) ---
+@warning_ignore("shadowed_global_identifier")
 @onready var player: CharacterBody3D = $"../../.." 
 @onready var pp_ray: RayCast3D = $PP_Mesh/PPRay
 @onready var makarov_ray: RayCast3D = $Makarov_Mesh/MakarovRay
@@ -91,8 +95,8 @@ var current_weapon: Weapon = Weapon.PP
 @onready var fuc: AudioStreamPlayer = $fuc 
 @onready var click: AudioStreamPlayer = $click 
 @onready var shovel_swing: AudioStreamPlayer = $shovel_swing # Твой новый сочный хлюп
-@onready var PPS_fire: AudioStreamPlayer = $PPS
-@onready var PM_fire: AudioStreamPlayer = $PM
+@onready var PPS_fire: AudioStreamPlayer3D = $PPS
+@onready var PM_fire: AudioStreamPlayer3D = $PM
 var mouse_mov_x: float = 0.0
 var mouse_mov_y: float = 0.0
 
@@ -127,8 +131,11 @@ func _unhandled_input(event: InputEvent) -> void:
 			if player and player.current_state != player.State.RAMMING:
 				start_reload()
 
-	# РВАНЫЙ ПРИЦЕЛ ЧЕРЕЗ ТВОИ АНИМАЦИИ (Блокируем прицеливание для лопаты)
-	if event.is_action_pressed("aim") and not is_reloading and not is_suicide_anim and not is_swing:
+	if event.is_action_pressed("aim") and not is_reloading and not is_suicide_anim and not is_swing: #swing Это смена оружия!
+		if current_weapon == Weapon.SHOVEL:
+			if fire_cooldown <= 0.0:
+				_heavy_attack_with_shovel()
+				fire_cooldown = WEAPON_DATA[Weapon.SHOVEL]["fire_rate"] * 2 
 		if current_weapon != Weapon.SHOVEL:
 			is_aiming = true
 			if camera_anim_player: camera_anim_player.play("aim")
@@ -298,13 +305,14 @@ func shoot_weapon() -> void:
 		_attack_with_shovel()
 		return
 	if current_weapon == Weapon.MAKAROV:
-		$PPS.volume_db = -18.0
+		PM_fire.volume_db = -18.0
 	else:
-		$PPS.volume_db = 0
+		PPS_fire.volume_db = 0
 	if data.has("sound") and not current_ammo[current_weapon] <= 0:
 		# Напрямую загружаем трек из словаря в ноду PPS
-		$PPS.stream = load(data["sound"])
-		$PPS.play()
+		PPS_fire.stream = load(data["sound"])
+		PPS_fire.pitch_scale = randf_range(0.9, 1.1)
+		PPS_fire.play()
 
 
 	# --- БЛОК ОГНЕСТРЕЛА ---
@@ -379,7 +387,7 @@ func shoot_weapon() -> void:
 	# Выбираем активный луч и стреляем
 	var active_ray: RayCast3D = pp_ray if current_weapon == Weapon.PP else makarov_ray
 	_process_raycast_hit(active_ray, current_damage, current_spread)
-
+	_alert_enemies_by_sound()
 # КАСТОМНАЯ ФУНКЦИЯ УДАРА САПЁРНОЙ ЛОПАТОЙ (ВЕРСИЯ С SHAPECAST)
 func _attack_with_shovel() -> void:
 	print("ГГ размахнулся складной лопатой по площади!")
@@ -435,7 +443,95 @@ func _attack_with_shovel() -> void:
 				hit_object.take_damage(base_damage, "body")
 			else:
 				hit_object.take_damage(base_damage)
+func _heavy_attack_with_shovel() -> void:
+	print("ГГ размахнулся складной лопатой по площади!")
+	if weapon_anim_player: weapon_anim_player.play("shovel_attack")
+	# 1. Воспроизводим звук вздоха/замаха
+	if shovel_swing: shovel_swing.play()
+	
+	# 2. Пинок скорости вперед (Game Feel)
+	if player and not player.is_dead:
+		var forward_dir = -player.global_transform.basis.z.normalized()
+		player.velocity += forward_dir * 5.5 
+	
+	# 3. Расчет адреналинового урона
+	var base_damage = WEAPON_DATA[Weapon.SHOVEL]["damage"] * 2
+	if player and player.health < 30.0:
+		base_damage *= 2.2 
+		print("АДРЕНАЛИН! Лопата бьет с удвоенной яростью!")
+	
+	current_recoil_z += 0.04 
+	await get_tree().create_timer(0.96).timeout
+	if shovel_ray:
+		shovel_ray.force_shapecast_update()
+	
+	# 4. Проверка объемного попадания через ShapeCast
+	if shovel_ray and shovel_ray.is_colliding():
+		# Шейпкаст находит массивы объектов. Берём самый первый (ближайший)
+		var hit_object = shovel_ray.get_collider(0)
+		var hit_point = shovel_ray.get_collision_point(0)
+		var hit_normal = shovel_ray.get_collision_normal(0)
+		
+		# Высекаем искры в точке контакта объекта с формой шейпкаста
+		if wall_sparks:
+			wall_sparks.global_position = hit_point
+			var look_target = hit_point + hit_normal
+			if wall_sparks.global_position.is_equal_approx(look_target) or hit_normal.is_equal_approx(Vector3.UP) or hit_normal.is_equal_approx(Vector3.DOWN):
+				wall_sparks.look_at(hit_point + hit_normal, Vector3.FORWARD)
+			else:
+				wall_sparks.look_at(look_target, Vector3.UP)
+			wall_sparks.restart()
+			wall_sparks.emitting = true
 
+		# Наносим урон врагам с твоей системой хедшотов
+		if hit_object.has_method("take_damage"):
+			# Получаем ID формы коллизии, в которую врезался шейпкаст
+			var hit_collider_id = shovel_ray.get_collider_shape(0)
+			var hit_owner = hit_object.shape_owner_get_owner(hit_collider_id)
+			
+			if hit_owner and hit_owner.name == "head":
+				hit_object.take_damage(base_damage, "head")
+				print("Размозжил голову через ShapeCast!")
+			elif hit_owner and hit_owner.name == "body":
+				hit_object.take_damage(base_damage, "body")
+			else:
+				hit_object.take_damage(base_damage)
+	await get_tree().create_timer(0.26).timeout
+	# Сначала принудительно обновляем физику шейпкаста в этот кадр
+	if shovel_ray:
+		shovel_ray.force_shapecast_update()
+	
+	# 4. Проверка объемного попадания через ShapeCast
+	if shovel_ray and shovel_ray.is_colliding():
+		# Шейпкаст находит массивы объектов. Берём самый первый (ближайший)
+		var hit_object = shovel_ray.get_collider(0)
+		var hit_point = shovel_ray.get_collision_point(0)
+		var hit_normal = shovel_ray.get_collision_normal(0)
+		
+		# Высекаем искры в точке контакта объекта с формой шейпкаста
+		if wall_sparks:
+			wall_sparks.global_position = hit_point
+			var look_target = hit_point + hit_normal
+			if wall_sparks.global_position.is_equal_approx(look_target) or hit_normal.is_equal_approx(Vector3.UP) or hit_normal.is_equal_approx(Vector3.DOWN):
+				wall_sparks.look_at(hit_point + hit_normal, Vector3.FORWARD)
+			else:
+				wall_sparks.look_at(look_target, Vector3.UP)
+			wall_sparks.restart()
+			wall_sparks.emitting = true
+
+		# Наносим урон врагам с твоей системой хедшотов
+		if hit_object.has_method("take_damage"):
+			# Получаем ID формы коллизии, в которую врезался шейпкаст
+			var hit_collider_id = shovel_ray.get_collider_shape(0)
+			var hit_owner = hit_object.shape_owner_get_owner(hit_collider_id)
+			
+			if hit_owner and hit_owner.name == "head":
+				hit_object.take_damage(base_damage, "head")
+				print("Размозжил голову через ShapeCast!")
+			elif hit_owner and hit_owner.name == "body":
+				hit_object.take_damage(base_damage, "body")
+			else:
+				hit_object.take_damage(base_damage)
 func _process_raycast_hit(active_ray: RayCast3D, current_damage: float, spread: float) -> void:
 	if not active_ray: return
 	
@@ -512,6 +608,28 @@ func enable_parfizan_fov() -> void:
 	if player:
 		player.block_dynamic_fov = false # Включаем динамический FOV игрока обратно
 		print("Имплант глаза перезагружен, динамический FOV вернулся")
+func _alert_enemies_by_sound() -> void:
+	var radius = WEAPON_DATA[current_weapon].get("sound_radius", 0.0)
+	print("[ТЕСТ СЛУХА] 1. Функция вызвана! Текущее оружие: ", current_weapon, " | Радиус шума: ", radius)
+	
+	if radius <= 0.0: 
+		print("[ТЕСТ СЛУХА] Блокировка: у этого оружия радиус 0, выходим.")
+		return 
+	
+	var enemies = get_tree().get_nodes_in_group("enemies")
+	print("[ТЕСТ СЛУХА] 2. В глобальной группе 'enemies' найдено объектов: ", enemies.size())
+	
+	for enemy in enemies:
+		if is_instance_valid(enemy) and enemy.has_method("hear_noise"):
+			var distance = global_position.distance_to(enemy.global_position)
+			print("[ТЕСТ СЛУХА] 3. Вижу врага: ", enemy.name, " | Дистанция до него: ", distance, " м.")
+			
+			if distance <= radius:
+				print("[ТЕСТ СЛУХА] 4. УСПЕХ! Отправляю врага ", enemy.name, " проверять шум.")
+				enemy.hear_noise(global_position)
+		else:
+			if is_instance_valid(enemy):
+				print("[ТЕСТ СЛУХА] Ошибка: у объекта ", enemy.name, " в группе нет метода hear_noise()!")
 
 func clic() -> void:
 	if click: click.play()

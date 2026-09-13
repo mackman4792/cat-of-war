@@ -14,6 +14,7 @@ var current_ai_state: AIState = AIState.PATROL
 var knockback_velocity: Vector3 = Vector3.ZERO
 const KNOCKBACK_FRICTION = 16.0 
 
+@warning_ignore("shadowed_global_identifier")
 @onready var player = get_tree().current_scene.find_child("Player", true, false)
 
 func _physics_process(delta: float) -> void:
@@ -56,7 +57,7 @@ func _physics_process(delta: float) -> void:
 		if target == player and player.has_method("take_damage"):
 			player.take_damage(DAMAGE)
 			bite_timer = BITE_COOLDOWN
-			print("АМ! Собака-таблетка откусила у ГГ ", DAMAGE, " ХП!")
+			print("Укус.", DAMAGE,)
 
 # Функция получения урона (в неё стреляют твои ППС и Макаров!)
 func take_damage(amount: float, hit_zone: String = "body") -> void:
@@ -64,13 +65,13 @@ func take_damage(amount: float, hit_zone: String = "body") -> void:
 	
 	if hit_zone == "head":
 		final_damage = amount * 5.2
-		print("КРИТ В БОРДОВУЮ БАШКУ! Урон: ", final_damage)
+		print("Попадание в голову: ", final_damage)
 	else:
 		print("Попадание в туловище собаки. Урон: ", final_damage)
 		
 	health -= final_damage
 	if health <= 0.0:
-		print("Собака-таблетка аннигилировалась!")
+		print("Ещё одна смерть.")
 		queue_free()
 func take_ram_damage(amount: float, impulse: Vector3) -> void:
 	health -= amount
@@ -79,5 +80,5 @@ func take_ram_damage(amount: float, impulse: Vector3) -> void:
 	print("ИИ сбит с ног тараном! Осталось ХП: ", health)
 	if health <= 0.0: _die()
 func _die() -> void:
-	print("Собака-таблетка аннигилировалась!")
+	print("Ещё одна смерть.")
 	queue_free()

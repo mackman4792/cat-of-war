@@ -7,6 +7,11 @@
 radius = 0.241
 height = 1.474
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5uy6h"]
+render_priority = 0
+shader = ExtResource("2_md0e3")
+shader_parameter/jitter_strength = 1.0
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4ra3w"]
 render_priority = 0
 shader = ExtResource("2_md0e3")
@@ -18,7 +23,12 @@ radius = 0.215
 height = 1.47
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_4ra3w"]
-radius = 15.0
+radius = 52.388878
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c4w8v"]
+render_priority = 0
+shader = ExtResource("2_md0e3")
+shader_parameter/jitter_strength = 1.0
 
 [sub_resource type="SphereMesh" id="SphereMesh_md0e3"]
 radius = 0.185
@@ -120,6 +130,7 @@ shape = SubResource("CapsuleShape3D_md0e3")
 
 [node name="Body" type="MeshInstance3D" parent="." unique_id=1203991417]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.099573016, 0)
+material_override = SubResource("ShaderMaterial_5uy6h")
 mesh = SubResource("CapsuleMesh_4ra3w")
 
 [node name="VisionArea" type="Area3D" parent="." unique_id=54294943]
@@ -133,6 +144,7 @@ one_shot = true
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=940205844]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.84334016, 0)
+material_override = SubResource("ShaderMaterial_c4w8v")
 mesh = SubResource("SphereMesh_md0e3")
 
 [node name="Cube" type="MeshInstance3D" parent="." unique_id=1794146224]
@@ -156,17 +168,23 @@ shape = SubResource("SphereShape3D_md0e3")
 [node name="RayCastLeft" type="RayCast3D" parent="." unique_id=1724971088]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.86349624, -0.06281829)
 target_position = Vector3(0, 0, 0)
-collision_mask = 30
+collision_mask = 31
 
 [node name="RayCastRight" type="RayCast3D" parent="." unique_id=297698253]
 transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, 0.86349624, 0)
 target_position = Vector3(0, 0, 0)
-collision_mask = 30
+collision_mask = 31
 
 [node name="RayCastCenter" type="RayCast3D" parent="." unique_id=956763274]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.86349624, -0.06281829)
 target_position = Vector3(0, 0, 0)
-collision_mask = 30
+collision_mask = 31
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=1814010382 groups=["enemies"]]
+path_desired_distance = 1.5
+avoidance_enabled = true
+radius = 0.3
+neighbor_distance = 5.0
 
 [connection signal="body_entered" from="VisionArea" to="." method="_on_vision_area_body_entered"]
 [connection signal="body_exited" from="VisionArea" to="." method="_on_vision_area_body_exited"]

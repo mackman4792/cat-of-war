@@ -24,7 +24,6 @@
 [ext_resource type="Texture2D" uid="uid://d37gpudwmktgv" path="res://PPSo.png" id="14_x3bve"]
 [ext_resource type="AudioStream" uid="uid://jm0aejl6xmpc" path="res://sounds/phew.mp3" id="16_i3mcw"]
 [ext_resource type="Texture2D" uid="uid://pe0ghvkq5mig" path="res://PM_gun.png" id="16_tfn0g"]
-[ext_resource type="Shader" uid="uid://bmmrj0wi68ltf" path="res://scripts/ps1_jitter.gdshader" id="16_ur3qh"]
 [ext_resource type="Texture2D" uid="uid://bkfyc62jcffyt" path="res://PM..png" id="17_giw31"]
 [ext_resource type="AudioStream" uid="uid://co5mjjr3ms4tp" path="res://sounds/punch.mp3" id="17_gvn1x"]
 [ext_resource type="Texture2D" uid="uid://60vy7r61sql0" path="res://shovelidk.png" id="20_fy6bm"]
@@ -72,106 +71,44 @@ metallic_specular = 0.7
 material = SubResource("StandardMaterial3D_cthcg")
 size = Vector3(0.02, 0.02, 0.02)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_boobf"]
-render_priority = 0
-shader = ExtResource("16_ur3qh")
-shader_parameter/albedo_texture = ExtResource("13_a0qgu")
-shader_parameter/jitter_strength = 1.0
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vv46u"]
+albedo_texture = ExtResource("13_a0qgu")
+metallic = 1.0
+texture_filter = 0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_p3mnr"]
-render_priority = 0
-shader = ExtResource("16_ur3qh")
-shader_parameter/albedo_texture = ExtResource("17_giw31")
-shader_parameter/jitter_strength = 1.0
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vyws4"]
+albedo_texture = ExtResource("14_x3bve")
+metallic = 0.45
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_220d8"]
-render_priority = 0
-shader = ExtResource("16_ur3qh")
-shader_parameter/albedo_texture = ExtResource("14_x3bve")
-shader_parameter/jitter_strength = 1.0
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_220d8"]
+albedo_texture = ExtResource("14_x3bve")
+metallic = 0.75
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_837wh"]
-render_priority = 0
-shader = ExtResource("16_ur3qh")
-shader_parameter/albedo_texture = ExtResource("17_giw31")
-shader_parameter/jitter_strength = 1.0
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p3mnr"]
+albedo_texture = ExtResource("13_a0qgu")
+metallic = 1.0
+texture_filter = 0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_28pvg"]
-render_priority = 0
-shader = ExtResource("16_ur3qh")
-shader_parameter/albedo_texture = ExtResource("14_x3bve")
-shader_parameter/jitter_strength = 1.0
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ur3qh"]
+albedo_texture = ExtResource("20_fy6bm")
+metallic_specular = 0.2
+texture_filter = 0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_41uey"]
-render_priority = 0
-shader = ExtResource("16_ur3qh")
-shader_parameter/albedo_texture = ExtResource("16_tfn0g")
-shader_parameter/jitter_strength = 1.0
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_y7efk"]
+albedo_texture = ExtResource("16_tfn0g")
+metallic = 0.7
+roughness = 0.9
+texture_filter = 0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_j7kyn"]
-render_priority = 0
-shader = ExtResource("16_ur3qh")
-shader_parameter/albedo_texture = ExtResource("14_x3bve")
-shader_parameter/jitter_strength = 1.0
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_boobf"]
+albedo_texture = ExtResource("17_giw31")
+metallic = 1.0
+metallic_specular = 0.85
+texture_filter = 0
+texture_repeat = false
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ur3qh"]
-render_priority = 0
-shader = ExtResource("16_ur3qh")
-shader_parameter/albedo_texture = ExtResource("20_fy6bm")
-shader_parameter/jitter_strength = 1.0
-
-[sub_resource type="Shader" id="Shader_y7efk"]
-code = "shader_type spatial;
-render_mode vertex_lighting, diffuse_lambert_wrap, specular_disabled;
-
-// Текстура твоей модели
-uniform sampler2D albedo_texture : filter_nearest; 
-// Сила дрожания (чем меньше число, тем сильнее шаг сетки округления)
-uniform float jitter_strength : hint_range(0.0, 1.0) = 1.0;
-
-void vertex() {
-    // Переводим координаты вершины в пространство экрана (Clip Space)
-    vec4 clip_position = PROJECTION_MATRIX * MODELVIEW_MATRIX * vec4(VERTEX, 1.0);
-    
-    // Вычисляем разрешение \"виртуального экрана\" PS1
-    // Обычное разрешение консоли было около 320x240
-    vec2 snap_res = vec2(320.0, 240.0) * (1.0 - jitter_strength * 0.5);
-    
-    // Округляем позицию вершин до пиксельной сетки экрана
-    clip_position.xyz /= clip_position.w;
-    clip_position.xy = floor(clip_position.xy * snap_res) / snap_res;
-    clip_position.xyz *= clip_position.w;
-    
-    POSITION = clip_position;
-}
-
-void fragment() {
-    // Накладываем текстуру без сглаживания
-    vec4 tex = texture(albedo_texture, UV);
-    ALBEDO = tex.rgb;
-}
-"
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_boobf"]
-load_path = "res://.godot/imported/PM_gun.png-1d8d8fc584a51408656d71b2522ec8db.s3tc.ctex"
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_y7efk"]
-render_priority = 0
-shader = SubResource("Shader_y7efk")
-shader_parameter/albedo_texture = SubResource("CompressedTexture2D_boobf")
-shader_parameter/jitter_strength = 0.001
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_vv46u"]
-render_priority = 0
-shader = ExtResource("16_ur3qh")
-shader_parameter/albedo_texture = ExtResource("17_giw31")
-shader_parameter/jitter_strength = 1.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_vyws4"]
-render_priority = 0
-shader = ExtResource("16_ur3qh")
-shader_parameter/albedo_texture = ExtResource("17_giw31")
-shader_parameter/jitter_strength = 1.0
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tfn0g"]
+albedo_texture = ExtResource("17_giw31")
 
 [sub_resource type="Animation" id="Animation_lxkhp"]
 length = 0.001
@@ -1553,93 +1490,6 @@ tracks/5/keys = {
 "values": [Vector3(0.004298523, 0.49809882, 0.0023753494)]
 }
 
-[sub_resource type="Animation" id="Animation_ur3qh"]
-resource_name = "shovel_attack"
-length = 1.8
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Shovel_Mesh:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.10675885, 0.24, 0.46, 0.68, 0.69, 0.9, 1.02, 1.35, 1.54, 1.78),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [Vector3(-0.23913412, 0.14464042, -0.3332274), Vector3(-0.093133695, 0.14111237, -0.31195077), Vector3(0.10537019, 0.14128555, -0.2837821), Vector3(0.18488136, 0.14294918, -0.27228776), Vector3(-0.91818476, 2.9564834, 3.0977437), Vector3(-0.8394697, -3.091793, -2.9735534), Vector3(-0.7792119, -3.0876422, -2.9627705), Vector3(-0.84049976, -3.0840492, -2.9677293), Vector3(-1.1235393, -3.0647635, -3.0064862), Vector3(-0.0884939, 0.31253403, -0.14033166), Vector3(-0.23913412, 0.14464042, -0.3332274)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Shovel_Mesh:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.10675885, 0.24, 0.46, 0.68, 0.69, 0.9, 1.02, 1.35, 1.54, 1.78),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [Vector3(0.1818614, -0.44565874, -0.3645261), Vector3(0.1818614, -0.427497, -0.35311958), Vector3(0.1818614, -0.3808502, -0.2847085), Vector3(0.21522063, -0.3662933, -0.2219252), Vector3(0.21522063, 0.08670062, -0.24694711), Vector3(0.17728177, 0.08670062, -0.24694711), Vector3(0.0950014, -0.022210598, -0.46137094), Vector3(0.1124987, -0.004247725, -0.468463), Vector3(0.16757318, 0.03363639, -0.42285937), Vector3(0.20165426, -0.38597023, -0.25175244), Vector3(0.1818614, -0.44565874, -0.3645261)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Shovel_Mesh/Cube_002:rotation")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [Vector3(0, 0, 0)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Shovel_Mesh/Cube:rotation")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [Vector3(-0.05454739, 0.046329465, -1.5808576)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("Shovel_Mesh/Cube_002:position")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [Vector3(0, 0, 0)]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("Shovel_Mesh/Cube:position")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [Vector3(0.004298523, 0.49809882, 0.0023753494)]
-}
-tracks/6/type = "method"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath(".")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"times": PackedFloat32Array(),
-"transitions": PackedFloat32Array(),
-"values": []
-}
-
 [sub_resource type="Animation" id="Animation_c6euj"]
 resource_name = "unaim"
 length = 1.5000035
@@ -1688,7 +1538,6 @@ _data = {
 &"reload": SubResource("Animation_v00sg"),
 &"shoot": SubResource("Animation_1u7qd"),
 &"shovel_attaack": SubResource("Animation_gvn1x"),
-&"shovel_attack": SubResource("Animation_ur3qh"),
 &"unaim": SubResource("Animation_c6euj")
 }
 
@@ -1754,35 +1603,22 @@ _data = {
 &"unaim": SubResource("Animation_2ubwf")
 }
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_mxgjj"]
-render_priority = 0
-shader = ExtResource("16_ur3qh")
-shader_parameter/albedo_texture = ExtResource("20_fy6bm")
-shader_parameter/jitter_strength = 1.0
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_giw31"]
+albedo_texture = ExtResource("20_fy6bm")
+texture_filter = 0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4iwyc"]
-render_priority = 0
-shader = ExtResource("16_ur3qh")
-shader_parameter/albedo_texture = ExtResource("21_chuxw")
-shader_parameter/jitter_strength = 1.0
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a0qgu"]
+albedo_texture = ExtResource("21_chuxw")
+texture_filter = 0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_v8xt5"]
-render_priority = 0
-shader = ExtResource("16_ur3qh")
-shader_parameter/albedo_texture = ExtResource("21_chuxw")
-shader_parameter/jitter_strength = 1.0
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x3bve"]
+albedo_texture = ExtResource("22_tfn0g")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4uvay"]
-render_priority = 0
-shader = ExtResource("16_ur3qh")
-shader_parameter/albedo_texture = ExtResource("21_chuxw")
-shader_parameter/jitter_strength = 1.0
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fy6bm"]
+albedo_texture = ExtResource("22_tfn0g")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_qvoxt"]
-render_priority = 0
-shader = ExtResource("16_ur3qh")
-shader_parameter/albedo_texture = ExtResource("22_tfn0g")
-shader_parameter/jitter_strength = 1.0
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_chuxw"]
+albedo_texture = ExtResource("22_tfn0g")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_gvn1x"]
 size = Vector3(0.1, 0.385, 0.535)
@@ -1790,9 +1626,6 @@ size = Vector3(0.1, 0.385, 0.535)
 [sub_resource type="BoxShape3D" id="BoxShape3D_nr340"]
 resource_local_to_scene = true
 size = Vector3(0.555, 0.5, 1.2)
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_y7efk"]
-radius = 0.10808366
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_iwpo4"]
 resource_local_to_scene = true
@@ -1822,7 +1655,7 @@ safe_margin = 0.01
 script = ExtResource("1_iwpo4")
 
 [node name="Head" type="Node3D" parent="." unique_id=702943879]
-transform = Transform3D(1, 0, 0, 0, 0.9741575, -0.22586921, 0, 0.22586925, 0.9741573, 0, 0.7110172, 0.05789645)
+transform = Transform3D(1, 0, 0, 0, 0.9741575, -0.22586922, 0, 0.22586925, 0.9741574, 0, 0.7110172, 0.05789645)
 
 [node name="Camera3D" type="Camera3D" parent="Head" unique_id=1154088066]
 transform = Transform3D(1.0000001, 0, 0, 0, 1.0000001, 0, 0, 0, 1.0000001, 0, -0.011896312, 0)
@@ -1956,29 +1789,29 @@ process_material = SubResource("ParticleProcessMaterial_cthcg")
 draw_pass_1 = SubResource("BoxMesh_86qqj")
 
 [node name="PP_Mesh" parent="Head/Camera3D/WeaponContainer" unique_id=857265169 instance=ExtResource("6_v00sg")]
-transform = Transform3D(0.7299991, 0, 0, 0, 0.7299956, 0, 0, 0, 0.7299963, 0.20220134, -0.18896037, -0.292731)
+transform = Transform3D(0.729258, 0, 0.032885708, 0, 0.7299956, 0, -0.032885835, 0, 0.7292552, 0.20220134, -0.21130276, -0.25012282)
 
 [node name="PPS_body" parent="Head/Camera3D/WeaponContainer/PP_Mesh" index="0" unique_id=1988720222]
-material_override = SubResource("ShaderMaterial_boobf")
+material_override = SubResource("StandardMaterial3D_vv46u")
 
 [node name="Cube_001" parent="Head/Camera3D/WeaponContainer/PP_Mesh" index="1" unique_id=30488114]
-material_override = SubResource("ShaderMaterial_p3mnr")
+material_override = SubResource("StandardMaterial3D_vyws4")
 
 [node name="ouch" parent="Head/Camera3D/WeaponContainer/PP_Mesh" index="2" unique_id=1268910513]
-material_override = SubResource("ShaderMaterial_220d8")
+material_override = SubResource("StandardMaterial3D_vyws4")
 
 [node name="PPS_Magazine" parent="Head/Camera3D/WeaponContainer/PP_Mesh" index="3" unique_id=639173273]
 transform = Transform3D(-0.9999842, 0, -0.0056871185, 0, 1.0000001, 0, 0.0056871204, 0, -0.99998385, -0.009561918, 0.08478451, -0.11897508)
-material_override = SubResource("ShaderMaterial_837wh")
+material_override = SubResource("StandardMaterial3D_vyws4")
 
 [node name="Cube_004" parent="Head/Camera3D/WeaponContainer/PP_Mesh" index="4" unique_id=519893974]
-material_override = SubResource("ShaderMaterial_28pvg")
+material_override = SubResource("StandardMaterial3D_220d8")
 
 [node name="Cube_005" parent="Head/Camera3D/WeaponContainer/PP_Mesh" index="5" unique_id=348405860]
-material_override = SubResource("ShaderMaterial_41uey")
+material_override = SubResource("StandardMaterial3D_p3mnr")
 
 [node name="Cube_006" parent="Head/Camera3D/WeaponContainer/PP_Mesh" index="6" unique_id=1403480527]
-material_override = SubResource("ShaderMaterial_j7kyn")
+material_override = SubResource("StandardMaterial3D_220d8")
 
 [node name="PPRay" type="RayCast3D" parent="Head/Camera3D/WeaponContainer/PP_Mesh" unique_id=108879268]
 transform = Transform3D(1, 3.4924597e-10, -3.7252903e-08, 0, 1.0000011, 1.3038516e-08, -4.8428774e-08, 3.7252903e-09, 1.0000017, -0.01666087, 0.17888516, -0.40634733)
@@ -1986,21 +1819,21 @@ target_position = Vector3(0, 0, -50)
 collision_mask = 15
 
 [node name="Makarov_Mesh" parent="Head/Camera3D/WeaponContainer" unique_id=705739185 instance=ExtResource("9_1u7qd")]
-transform = Transform3D(-0.4149992, 0, 6.266325e-08, 0, 0.4149994, 0, -6.266313e-08, 0, -0.41499993, 0.19798198, -0.21477932, -0.21738961)
+transform = Transform3D(-0.41197526, -0.049248524, 0.008677931, -0.04775479, 0.40882048, 0.05300748, -0.014839169, 0.051622592, -0.4115092, 0.2206522, -0.20789552, -0.18039194)
 
 [node name="Cube" parent="Head/Camera3D/WeaponContainer/Makarov_Mesh" index="0" unique_id=356216171]
-material_override = SubResource("ShaderMaterial_ur3qh")
+material_override = SubResource("StandardMaterial3D_ur3qh")
 
 [node name="Cube_001" parent="Head/Camera3D/WeaponContainer/Makarov_Mesh" index="1" unique_id=29704701]
-transform = Transform3D(0.9999998, 0, 0, 0, 0.022549802, -0.99974495, 0, 0.999745, 0.022549802, 0, 0.26891002, 0.15096216)
-material_override = SubResource("ShaderMaterial_y7efk")
+transform = Transform3D(1, 0, 0, 0, 0.02254982, -0.9997457, 0, 0.9997457, 0.02254982, 0, 0.26891002, 0.15096216)
+material_override = SubResource("StandardMaterial3D_y7efk")
 
 [node name="Cube_002" parent="Head/Camera3D/WeaponContainer/Makarov_Mesh" index="2" unique_id=472049101]
-material_override = SubResource("ShaderMaterial_vv46u")
+material_override = SubResource("StandardMaterial3D_boobf")
 
 [node name="Cube_003" parent="Head/Camera3D/WeaponContainer/Makarov_Mesh" index="3" unique_id=963753071]
 transform = Transform3D(0.9999996, 0, 0, 0, 0.99999934, 0, 0, 0, 1.0000002, 0, 0.056971446, 0.023913115)
-material_override = SubResource("ShaderMaterial_vyws4")
+material_override = SubResource("StandardMaterial3D_tfn0g")
 
 [node name="MakarovRay" type="RayCast3D" parent="Head/Camera3D/WeaponContainer/Makarov_Mesh" unique_id=685432534]
 transform = Transform3D(1, -7.1054274e-15, 0, -5.3290705e-15, 0.9999994, -5.2154064e-08, 0, -2.2351742e-08, 1, 8.940697e-08, 0.29050004, 0.52921796)
@@ -2029,59 +1862,54 @@ stream = ExtResource("12_aougp")
 stream = ExtResource("13_2ubwf")
 
 [node name="Shovel_Mesh" parent="Head/Camera3D/WeaponContainer" unique_id=340942400 instance=ExtResource("20_wgwu6")]
-transform = Transform3D(0.85166085, 0.26227343, 0.12603067, -0.28600758, 0.8262855, 0.21317402, -0.053586613, -0.24177553, 0.86525327, 0.1818614, -0.44565874, -0.3645261)
+transform = Transform3D(0.8572461, 0.27303934, 0.024012722, -0.2740934, 0.85394967, 0.07510144, -3.3527572e-09, -0.0788469, 0.8965383, 0.1818614, -0.4304303, -0.4280868)
 
 [node name="Cube_001" parent="Head/Camera3D/WeaponContainer/Shovel_Mesh" index="0" unique_id=1943593740]
-material_override = SubResource("ShaderMaterial_mxgjj")
+material_override = SubResource("StandardMaterial3D_giw31")
 
 [node name="Cube_002" parent="Head/Camera3D/WeaponContainer/Shovel_Mesh" index="1" unique_id=652366303]
 transform = Transform3D(1, 0, 0, 0, 1.0000004, 0, 0, 0, 1.0000001, 0, 0, 0)
-material_override = SubResource("ShaderMaterial_4iwyc")
+material_override = SubResource("StandardMaterial3D_a0qgu")
 
 [node name="Cube_003" parent="Head/Camera3D/WeaponContainer/Shovel_Mesh" index="2" unique_id=1025565488]
 transform = Transform3D(0.54866487, 4.1909516e-08, -1.1175871e-08, -4.656613e-10, 0.99999934, 2.6077032e-08, 0, -2.9802322e-08, 0.38853902, 0, 0, 0)
-material_override = SubResource("ShaderMaterial_v8xt5")
+material_override = SubResource("StandardMaterial3D_x3bve")
 
 [node name="Cube_004" parent="Head/Camera3D/WeaponContainer/Shovel_Mesh" index="3" unique_id=317451404]
-transform = Transform3D(0.54866487, 2.8871e-08, -7.450581e-09, -1.8626451e-09, 1.0000001, 1.4901161e-08, -2.9802322e-08, -1.8626451e-08, 0.3885392, 0.01241529, -0.03950849, 0.00601393)
-material_override = SubResource("ShaderMaterial_v8xt5")
+transform = Transform3D(0.54866487, 6.519258e-09, -1.8626451e-09, -4.656613e-10, 0.9999998, 7.450581e-09, 0, -1.4901161e-08, 0.38853905, 0.01241529, -0.03950849, 0.00601393)
+material_override = SubResource("StandardMaterial3D_x3bve")
 
 [node name="Cube_005" parent="Head/Camera3D/WeaponContainer/Shovel_Mesh" index="4" unique_id=1226488543]
-material_override = SubResource("ShaderMaterial_v8xt5")
+material_override = SubResource("StandardMaterial3D_x3bve")
 
 [node name="Cube_006" parent="Head/Camera3D/WeaponContainer/Shovel_Mesh" index="5" unique_id=1981184177]
-material_override = SubResource("ShaderMaterial_v8xt5")
+material_override = SubResource("StandardMaterial3D_x3bve")
 
 [node name="Cube_007" parent="Head/Camera3D/WeaponContainer/Shovel_Mesh" index="6" unique_id=951540013]
-material_override = SubResource("ShaderMaterial_v8xt5")
+material_override = SubResource("StandardMaterial3D_x3bve")
 
 [node name="Cube_008" parent="Head/Camera3D/WeaponContainer/Shovel_Mesh" index="7" unique_id=1874286529]
-material_override = SubResource("ShaderMaterial_v8xt5")
+material_override = SubResource("StandardMaterial3D_x3bve")
 
 [node name="Cube_009" parent="Head/Camera3D/WeaponContainer/Shovel_Mesh" index="8" unique_id=153364917]
-material_override = SubResource("ShaderMaterial_v8xt5")
+material_override = SubResource("StandardMaterial3D_x3bve")
 
 [node name="Cube_010" parent="Head/Camera3D/WeaponContainer/Shovel_Mesh" index="9" unique_id=308272079]
-material_override = SubResource("ShaderMaterial_v8xt5")
+material_override = SubResource("StandardMaterial3D_x3bve")
 
 [node name="Cube" parent="Head/Camera3D/WeaponContainer/Shovel_Mesh" index="10" unique_id=1572836049]
-transform = Transform3D(0.00052398123, -0.0037639802, -0.0035994563, 0.06952058, 3.785517e-05, -0.0042436547, -0.0038243025, 0.00017243887, -0.077637, 0.004298523, 0.49809882, 0.0023753494)
-material_override = SubResource("ShaderMaterial_4uvay")
+transform = Transform3D(0.00047728163, -0.0008085632, -0.002932864, 0.063324586, 8.131897e-06, -0.0034577614, -0.003483463, 3.704263e-05, -0.063259214, 0.004298523, 0.49809882, 0.0023753494)
+material_override = SubResource("StandardMaterial3D_x3bve")
 
 [node name="Cube_011" parent="Head/Camera3D/WeaponContainer/Shovel_Mesh" index="11" unique_id=612824760]
-transform = Transform3D(8.514744e-05, -0.0004577002, 0, 0.0073567936, 5.297401e-06, 0, 2.910383e-11, 3.637979e-12, -0.007345978, 0.0019027144, 0.4403569, -0.047073692)
-material_override = SubResource("ShaderMaterial_qvoxt")
+material_override = SubResource("StandardMaterial3D_x3bve")
 
 [node name="Cube_012" parent="Head/Camera3D/WeaponContainer/Shovel_Mesh" index="12" unique_id=1847248948]
-material_override = SubResource("ShaderMaterial_qvoxt")
-
-[node name="Cube_013" parent="Head/Camera3D/WeaponContainer/Shovel_Mesh" index="13" unique_id=1215260757]
-transform = Transform3D(8.514744e-05, -0.0004577002, 0, 0.0073567936, 5.297401e-06, 0, 2.910383e-11, 3.637979e-12, -0.007345978, 0.0025807917, 0.53804237, -0.046973348)
-material_override = SubResource("ShaderMaterial_qvoxt")
+material_override = SubResource("StandardMaterial3D_fy6bm")
 
 [node name="Cube_014" parent="Head/Camera3D/WeaponContainer/Shovel_Mesh" index="14" unique_id=972344516]
-transform = Transform3D(8.514721e-05, -0.0004577001, 5.820766e-11, 0.0073567936, 5.297402e-06, -2.6193447e-10, 0, -3.637979e-12, -0.0073459777, 0.014496073, 0.5036029, 0.05530709)
-material_override = SubResource("ShaderMaterial_qvoxt")
+transform = Transform3D(8.514721e-05, -0.00045770002, 5.820766e-11, 0.0073567904, 5.2973955e-06, -2.3283064e-10, -5.820766e-11, 0, -0.0073459763, 0.014496073, 0.5036029, 0.05530709)
+material_override = SubResource("StandardMaterial3D_chuxw")
 
 [node name="ShovelRay" type="ShapeCast3D" parent="Head/Camera3D/WeaponContainer/Shovel_Mesh" unique_id=926009430]
 shape = SubResource("BoxShape3D_gvn1x")
@@ -2102,17 +1930,12 @@ fixed_fps = 0
 process_material = SubResource("ParticleProcessMaterial_cthcg")
 draw_pass_1 = SubResource("BoxMesh_86qqj")
 
-[node name="PPS" type="AudioStreamPlayer3D" parent="Head/Camera3D/WeaponContainer" unique_id=1672004235]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2021459, 0, -0.48687205)
+[node name="PPS" type="AudioStreamPlayer" parent="Head/Camera3D/WeaponContainer" unique_id=2110670254]
 stream = ExtResource("27_x3bve")
-max_distance = 25.0
-bus = &"weapons"
 
-[node name="PM" type="AudioStreamPlayer3D" parent="Head/Camera3D/WeaponContainer" unique_id=1954710718]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2021459, 0, -0.48687205)
+[node name="PM" type="AudioStreamPlayer" parent="Head/Camera3D/WeaponContainer" unique_id=1092607658]
 stream = ExtResource("28_ur3qh")
-max_distance = 25.0
-bus = &"weapons"
+volume_db = -80.0
 
 [node name="KickCast" type="ShapeCast3D" parent="Head/Camera3D" unique_id=1370429110]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0.503, -0.6)
@@ -2124,9 +1947,6 @@ collide_with_areas = true
 target_position = Vector3(0, 0, -2)
 collision_mask = 255
 script = ExtResource("12_hbmbl")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Head/Camera3D" unique_id=2055150777]
-shape = SubResource("SphereShape3D_y7efk")
 
 [node name="BodyHitbox" type="CollisionShape3D" parent="." unique_id=1605924694]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.008, 0.4307245, 0)
@@ -2166,6 +1986,7 @@ parameters/looping = true
 
 [node name="PanicMusic" type="AudioStreamPlayer" parent="." unique_id=1663027232]
 stream = ExtResource("33_ur3qh")
+parameters/looping = true
 
 [connection signal="pressed" from="Head/Camera3D/CanvasLayer/PauseMenu/VBoxContainer/QuitButton" to="Head/Camera3D/CanvasLayer/PauseMenu" method="_on_quit_button_pressed"]
 

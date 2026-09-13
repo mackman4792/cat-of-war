@@ -4,7 +4,7 @@ render_mode vertex_lighting, diffuse_lambert_wrap, specular_disabled;
 // Текстура твоей модели
 uniform sampler2D albedo_texture : filter_nearest; 
 // Сила дрожания (чем меньше число, тем сильнее шаг сетки округления)
-uniform float jitter_strength : hint_range(0.0, 1.0) = 0.5;
+uniform float jitter_strength : hint_range(0.0, 0.8) = 1.0;
 
 void vertex() {
     // Переводим координаты вершины в пространство экрана (Clip Space)

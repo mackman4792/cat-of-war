@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://cyjwabhd2g5b8" path="res://main_menu.gd" id="1_7vrkn"]
 [ext_resource type="FontFile" uid="uid://b1or1yl4r5hqh" path="res://progoth.ttf" id="2_fu7sn"]
-[ext_resource type="Texture2D" uid="uid://dj46an3214r1q" path="res://let.png" id="2_jix8l"]
-[ext_resource type="AudioStream" uid="uid://bto37sg2sncf1" path="res://sounds/D5-the way ahead feels lonely.mp3" id="4_jix8l"]
+[ext_resource type="Texture2D" uid="uid://bi2dfe0pqnx5y" path="res://jh.png" id="2_jix8l"]
+[ext_resource type="AudioStream" uid="uid://n2yry2ope3hp" path="res://sounds/The Chancellor's Laugh.mp3" id="4_jix8l"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_jix8l"]
 font = ExtResource("2_fu7sn")
@@ -24,8 +24,9 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 106.0
-offset_bottom = 72.0
+offset_top = -4.0
+offset_right = 5.0
+offset_bottom = 2.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_jix8l")
@@ -48,7 +49,7 @@ layout_mode = 2
 
 [node name="GameTitle" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1320896231]
 layout_mode = 2
-text = "cat of war"
+text = "попа хахаха"
 label_settings = SubResource("LabelSettings_jix8l")
 horizontal_alignment = 1
 

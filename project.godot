@@ -14,14 +14,24 @@ config/name="cat of war"
 run/main_scene="uid://nsk2uyhw7u5w"
 config/features=PackedStringArray("4.6", "Forward Plus")
 run/max_fps=60
+run/low_processor_mode=true
 config/icon="res://icon.svg"
+
+[audio]
+
+buses/default_bus_layout="uid://dp1dyojt6g0v8"
 
 [display]
 
 window/size/viewport_width=960
 window/size/viewport_height=540
-window/size/mode=3
+window/size/mode=4
 window/stretch/mode="viewport"
+window/vsync/vsync_mode=3
+
+[global_group]
+
+enemies=""
 
 [input]
 
@@ -145,7 +155,6 @@ use={
 
 [physics]
 
-common/physics_ticks_per_second=100
 3d/physics_engine="Jolt Physics"
 
 [rendering]

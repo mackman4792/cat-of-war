@@ -15,6 +15,11 @@ height = 0.25473022
 radius = 0.067
 height = 0.24
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_aaxt1"]
+render_priority = 0
+shader = ExtResource("2_aaxt1")
+shader_parameter/jitter_strength = 0.7
+
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_lh1ya"]
 radius = 0.065
 height = 0.32
@@ -66,26 +71,32 @@ shape = SubResource("CapsuleShape3D_6etqx")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1463461990]
 transform = Transform3D(1, 0, 0, 0, -0.022460522, -0.99974775, 0, 0.99974775, -0.022460522, 0.008270502, 0.28311628, -0.0018913448)
+material_override = SubResource("ShaderMaterial_aaxt1")
 mesh = SubResource("CapsuleMesh_lh1ya")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=606404596]
 transform = Transform3D(1, 0, 0, 0, -0.46289387, -0.8864137, 0, 0.8864137, -0.46289387, 0.008270502, 0.38257754, -0.2237518)
+material_override = SubResource("ShaderMaterial_aaxt1")
 mesh = SubResource("CapsuleMesh_upgaf")
 
 [node name="MeshInstance3D3" type="MeshInstance3D" parent="." unique_id=2095689034]
 transform = Transform3D(1, 0, 0, 0, 0.9995869, -0.028741688, 0, 0.028741688, 0.9995869, 0.04540117, 0.09326111, 0.10962041)
+material_override = SubResource("ShaderMaterial_aaxt1")
 mesh = SubResource("CapsuleMesh_gehja")
 
 [node name="MeshInstance3D4" type="MeshInstance3D" parent="." unique_id=866368555]
 transform = Transform3D(1, 0, 0, 0, 0.9995869, -0.028741688, 0, 0.028741688, 0.9995869, -0.059619248, 0.09326111, 0.10962041)
+material_override = SubResource("ShaderMaterial_aaxt1")
 mesh = SubResource("CapsuleMesh_gehja")
 
 [node name="MeshInstance3D5" type="MeshInstance3D" parent="." unique_id=232029479]
 transform = Transform3D(1, 0, 0, 0, 0.9995869, -0.028741688, 0, 0.028741688, 0.9995869, -0.059619248, 0.09326111, -0.12317793)
+material_override = SubResource("ShaderMaterial_aaxt1")
 mesh = SubResource("CapsuleMesh_gehja")
 
 [node name="MeshInstance3D6" type="MeshInstance3D" parent="." unique_id=475769105]
 transform = Transform3D(1, 0, 0, 0, 0.9995869, -0.028741688, 0, 0.028741688, 0.9995869, 0.060136646, 0.09326111, -0.12317793)
+material_override = SubResource("ShaderMaterial_aaxt1")
 mesh = SubResource("CapsuleMesh_gehja")
 
 [node name="BiteRay" type="RayCast3D" parent="." unique_id=1049791685]

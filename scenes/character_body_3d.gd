@@ -1,9 +1,9 @@
 extends CharacterBody3D
-
+class_name player
 # БАЗОВЫЕ НАСТРОЙКИ (НОРМАЛЬНЫЙ РОСТ ПЕРСОНАЖА)
-var SPEED := 2.6
-var JUMP_VELOCITY := 7.5  
-var MOUSE_SENSITIVITY := 0.007
+var SPEED: float = 2.6
+var JUMP_VELOCITY: float = 7.5  
+var MOUSE_SENSITIVITY: float = 0.007
 # --- НАСТРОЙКИ СИСТЕМЫ ВЕСА И РАЗГРУЗКИ ---
 var current_weapon_weight: float = 0.0  # Вес текущего оружия в руках 
 var total_carried_weight: float = 0.0   # Общий вес ВСЕГО оружия за спиной
@@ -21,11 +21,11 @@ var ram_timer: float = 0.0
 var ram_cooldown_timer: float = 0.0
 var ram_direction: Vector3 = Vector3.ZERO
 
-const AIR_CONTROL := 50.0
-const AIR_SPEED_LIMIT = 50.0  # Максимальная скорость
-const AIR_CONTROL_LIMIT = 4.0   # Макс. скорость, которую можно развить ТОЛЬКО КНОПКАМИ в воздухе
-const AIR_ACCEL = 25.0          # Сила отзывчивости (чем выше, тем резче меняется направление)
-const AIR_FRICTION = 0.2        # Почти нулевое торможение, чтобы не терять огромную скорость в полете
+const AIR_CONTROL: float = 50.0
+const AIR_SPEED_LIMIT: float = 50.0  # Максимальная скорость
+const AIR_CONTROL_LIMIT: float = 4.0   # Макс. скорость, которую можно развить ТОЛЬКО КНОПКАМИ в воздухе
+const AIR_ACCEL: float = 25.0          # Сила отзывчивости (чем выше, тем резче меняется направление)
+const AIR_FRICTION: float = 0.2        # Почти нулевое торможение, чтобы не терять огромную скорость в полете
 
 var can_sprint: bool = true # Разрешен ли бег в данный момент
 var is_sprinting: bool = false
@@ -38,8 +38,8 @@ var jump_count: int = 0
 enum State { NORMAL, DIVING, PRONE, SLIDING, RAMMING }
 var current_state: State = State.NORMAL
 
-const DIVE_FORCE := 5.5           
-var PRONE_SPEED := 1.5            
+const DIVE_FORCE: float = 5.5           
+var PRONE_SPEED: float = 1.5            
 var dive_timer: float = 0.0      
 const DIVE_DURATION := 1.8       
 var was_dive_triggered: bool = false
@@ -112,7 +112,7 @@ var is_dead: bool = false
 @onready var ghost_rect: ColorRect = $Head/Camera3D/CanvasLayer/ColorRect
 @onready var blood_rect: ColorRect = $Head/Camera3D/CanvasLayer/blood_rect
 @onready var kick_cast: ShapeCast3D = $Head/Camera3D/KickCast
-
+@onready var weapon: gun = $Head/Camera3D/WeaponContainer
 # ССЫЛКИ НА ТВОИ ХИТБОКСЫ
 @onready var head_hitbox: CollisionShape3D = $HeadHitbox
 @onready var body_hitbox: CollisionShape3D = $BodyHitbox
@@ -124,6 +124,15 @@ var is_dead: bool = false
 #ШЕЙДЕРЫ
 @onready var panic_overlay: ColorRect = $Head/Camera3D/CanvasLayer/sorry
 @onready var help_label: Label = $Head/Camera3D/CanvasLayer/Label # Проверь путь по дереву узлов слева!
+@onready var panic_music: AudioStreamPlayer = $PanicMusic
+
+# Порог здоровья, ниже которого Артёму становится страшно
+const PANIC_THRESHOLD: float = 40.0 
+
+
+const MAX_PANIC_PITCH: float = 1.1 
+const MAX_PANIC_VOLUME: float = 11.0 
+const MIN_PANIC_VOLUME: float = -40.0 
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -138,19 +147,15 @@ func _unhandled_input(event: InputEvent) -> void:
 		var pause_menu = $Head/Camera3D/CanvasLayer/PauseMenu
 		if pause_menu:
 			pause_menu.toggle_pause()
-			return # Выходим, чтобы мертвый игрок не делал другие действия в этот кадр
+			return
 
 	if is_dead: return
 
 	if event is InputEventKey and event.keycode == KEY_K and help_label:
-		# event.pressed возвращает true, когда кнопку нажали или держат, 
-		# и false, когда её полностью отпустили
 		if event.pressed:
 			help_label.visible = true
-			print("Кнопку удерживают, показываем помощь")
 		else:
 			help_label.visible = false
-			print("Кнопку отпустили, прячем помощь")
 
 	if event is InputEventMouseMotion:
 		# ЕСЛИ ТАРАНИМ: режем чувствительность мыши в 15 раз (делаем камеру очень тяжелой)
@@ -197,10 +202,11 @@ func _physics_process(delta: float) -> void:
 	_handle_health_system(delta)
 	if maneuver_invul_time > 0.0:
 		maneuver_invul_time -= delta
+	if not is_dead:
+		heal(0.002)
 
-	# ИЗМЕНЕНО: Добавили проверку "and can_sprint"цц
-	if Input.is_action_pressed("sprint") and current_state == State.NORMAL and stamina > 0.0 and can_sprint:
-		# УРОВЕНЬ 3: НЕИСТОВЫЙ СПРИНТ (на V) — Тратит 25 стамины в секунду (исходя из твоего move_toward)
+	if Input.is_action_pressed("sprint") and current_state == State.NORMAL and stamina > 0.0 and can_sprint and not weapon.is_aiming:
+		# УРОВЕНЬ 3: НЕИСТОВЫЙ СПРИНТ (на V) — Тратит 25 стамины в секунду
 		stamina = move_toward(stamina, 0.0, 25.0 * delta)
 		var base_max_sprint = 11.0 * final_speed_modifier
 		var absolute_max_sprint = base_max_sprint * adrenaline_multiplier
@@ -215,13 +221,12 @@ func _physics_process(delta: float) -> void:
 		if sprint_timer >= SPRINT_DELAY:
 			max_jumps = 3
 			
-		# ИЗМЕНЕНО: Проверяем ноль ОДИН раз и сразу блочим can_sprint
 		if stamina <= 0.001 and can_sprint:
 			stamina = 0.0
 			start_sprint_cooldown()
 			
-	elif Input.is_action_pressed("run") and current_state == State.NORMAL:
-		# УРОВЕНЬ 2: ОБЫЧНЫЙ БЕГ (на Shift) — Не тратит стамину, но и НЕ регенерирует её
+	elif Input.is_action_pressed("run") and current_state == State.NORMAL and not is_leaning and not weapon.is_aiming:
+		# УРОВЕНЬ 2: ОБЫЧНЫЙ БЕГ
 		var base_max_run = 5.5 * final_speed_modifier
 		var absolute_max_run = base_max_run * adrenaline_multiplier
 		SPEED = clamp(SPEED + 3.0 * delta, 2.6, absolute_max_run)
@@ -231,8 +236,7 @@ func _physics_process(delta: float) -> void:
 		max_jumps = 2
 		
 	else:
-		# УРОВЕНЬ 1: ТАКТИЧЕСКИЙ ШАГ / ХОДЬБА (без зажатых клавиш)
-		# ИЗМЕНЕНО: Убрал отсюда дублирующуюся регенерацию, так как она все равно считается внизу скрипта
+		# УРОВЕНЬ 1: ТАКТИЧЕСКИЙ ШАГ / ХОДЬБА
 		var max_walk_speed = 3.5 * final_speed_modifier
 		if max_walk_speed < 2.6: 
 			max_walk_speed = 2.6
@@ -482,6 +486,32 @@ func _physics_process(delta: float) -> void:
 				velocity.z = move_toward(velocity.z, 0.0, AIR_FRICTION * delta)
 	# Физический сдвиг тела игрока
 	move_and_slide()
+		# --- ДИНАМИЧЕСКАЯ МУЗЫКА ПАНИКИ ---
+	if health <= 0.2:
+		panic_music.stop()
+	
+	elif health < PANIC_THRESHOLD:
+		# Если музыка почему-то была выключена — включаем
+		if not panic_music.playing:
+			panic_music.play()
+			
+		# Считаем "коэффициент паники" от 0.0 (только вошли в зону страха) до 1.0 (почти труп)
+		# remap берет ХП от порога (40) до 1 и превращает в шкалу от 0 до 1
+		var panic_factor = remap(health, PANIC_THRESHOLD, 22.0, 0.0, 1.0)
+		# На всякий случай зажимаем значения от 0 до 1, чтобы не было багов
+		panic_factor = clamp(panic_factor, 0.0, 1.0)
+		
+		# 1. Плавное ускорение трека (от дефолтных 1.0 до ускоренных 1.4)
+		panic_music.pitch_scale = lerp(1.0, MAX_PANIC_PITCH, panic_factor)
+		
+		# 2. Плавное нарастание громкости (от полной тишины -40дБ до громкого баса +5дБ)
+		panic_music.volume_db = lerp(MIN_PANIC_VOLUME, MAX_PANIC_VOLUME, panic_factor)
+		
+	else:
+		# Если здоровья больше 40 — плавно уводим музыку в тишину перед тем как выключить
+		panic_music.volume_db = move_toward(panic_music.volume_db, MIN_PANIC_VOLUME, 30.0 * delta)
+		if panic_music.volume_db <= MIN_PANIC_VOLUME:
+			panic_music.stop()
 
 	# Обработка удара по тушам нацистов
 	if current_state == State.RAMMING:
@@ -574,6 +604,8 @@ func BOB_AMAP_Y_HELPER() -> float:
 	return BOB_AMPLITUDE
 		
 func _process(delta: float) -> void:
+	if health <= 0.2:
+		panic_music.stop()
 	if health < 25:
 		BASE_FOV = 95.0
 		SPRINT_FOV = 109.0
@@ -634,7 +666,6 @@ func take_damage(amount: float) -> void:
 func heal(amount: float) -> void:
 	if is_dead: return
 	health += amount
-	print("heal:", int(amount) )
 	
 func die(reason: String = "") -> void:
 	if is_dead: return
